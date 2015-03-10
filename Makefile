@@ -38,10 +38,10 @@ coverage:
 	coverage html
 	open htmlcov/index.html
 
+api-docs:
+	sphinx-apidoc -Mf -o docs/ leicacam
+
 docs:
-	rm -f docs/leicacam.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -M -o docs/ leicacam
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html

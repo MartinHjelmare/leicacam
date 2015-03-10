@@ -15,17 +15,12 @@ if sys.argv[-1] == 'publish':
 
 os.system('make rst')
 readme = open('README.rst').read()
-doclink = """
-Documentation
--------------
-
-The full documentation is at http://leicacam.rtfd.org."""
 
 setup(
     name='leicacam',
     version='0.0.1',
     description='Control Leica microscopes with python',
-    long_description=readme + '\n\n' + doclink,
+    long_description=readme,
     author='Arve Seljebu',
     author_email='arve.seljebu@gmail.com',
     url='https://github.com/arve0/leicacam',

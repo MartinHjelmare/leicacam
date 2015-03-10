@@ -23,33 +23,33 @@ pip install leicacam
 
 TODO: Write example.
 
-## Testing
+## API reference
 
-Install testing requirements:
+API reference is at http://leicacam.rtfd.org."""
 
+## Development
+Install dependencies and link development version of leicacam to pip:
 ```bash
-pip install tox
+pip install -r dev-requirements.txt
+./setup.py develop
 ```
 
-Run:
-
+### Testing
 ```bash
 tox
 ```
 
-## Documentation
-
+### Build documentation locally
 To build the documentation, you'll need sphinx:
-
 ```bash
 pip install -r docs/requirements.txt
 ```
 
 To build the documentation:
-
 ```bash
 make docs
 ```
+
 
 
 [build-status-image]: https://secure.travis-ci.org/arve0/leicacam.png?branch=master
