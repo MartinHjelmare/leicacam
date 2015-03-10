@@ -7,10 +7,6 @@
 
 Control Leica microscopes with python
 
-## Requirements
-
-* Python (2.7, 3.4)
-
 ## Installation
 
 Install using `pip`...
