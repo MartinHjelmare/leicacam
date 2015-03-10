@@ -2,6 +2,7 @@
 
 [![build-status-image]][travis]
 [![pypi-version]][pypi]
+[![wheel]][pypi]
 
 ## Overview
 
@@ -52,3 +53,4 @@ make docs
 [travis]: http://travis-ci.org/arve0/leicacam?branch=master
 [pypi-version]: https://pypip.in/version/leicacam/badge.svg
 [pypi]: https://pypi.python.org/pypi/leicacam
+[wheel]: https://pypip.in/wheel/leicacam/badge.png
