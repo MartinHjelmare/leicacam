@@ -14,7 +14,11 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 os.system('make rst')
-readme = open('README.rst').read()
+try:
+    readme = open('README.rst').read()
+except FileNotFoundError:
+    print('pandoc not found, not making rst description')
+    readme = ''
 
 setup(
     name='leicacam',
