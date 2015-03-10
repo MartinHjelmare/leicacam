@@ -4,4 +4,4 @@ __version__ = '0.0.1'
 
 __all__ = ['CAM']
 
-from cam import CAM
+from .cam import CAM
