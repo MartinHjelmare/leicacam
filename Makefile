@@ -51,7 +51,7 @@ release: clean rst
 	python setup.py bdist_wheel upload
 
 rst:
-	pandoc --from=markdown --to=rst README.md -o README.rst
+	if type pandoc; then pandoc --from=markdown --to=rst README.md -o README.rst; fi
 
 sdist: clean rst
 	python setup.py sdist
