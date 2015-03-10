@@ -21,7 +21,7 @@ TODO: Write example.
 
 ## API reference
 
-API reference is at http://leicacam.rtfd.org."""
+API reference is at http://leicacam.rtfd.org.
 
 ## Development
 Install dependencies and link development version of leicacam to pip:
