@@ -9,7 +9,6 @@ os.system('make rst')
 try:
     readme = open('README.rst').read()
 except FileNotFoundError:
-    print('pandoc not found, not making rst description')
     readme = ''
 
 setup(

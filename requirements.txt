@@ -1,3 +1,5 @@
 wheel>=0.22
 setuptools-git
-pydebug
+-r docs/requirements.txt
+
+-e .
