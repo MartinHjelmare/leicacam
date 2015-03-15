@@ -1,9 +1,19 @@
 from time import sleep
 from collections import OrderedDict
-import socket, pydebug
+import socket, pydebug, platform, os
 
 # debug with `DEBUG=matrixscreener python script.py`
-debug = pydebug.debug('leicacam')
+if platform.system() == 'Windows':
+    # monkeypatch
+    def debug(msg):
+        try:
+            dbg = os.environ['DEBUG']
+            if dbg == 'leicacam' or dbg == '*':
+                print('leicacam ' + str(msg))
+        except KeyError:
+            pass
+else:
+    debug = pydebug.debug('leicacam')
 
 
 class CAM:
@@ -17,7 +27,7 @@ class CAM:
                        ('app', 'matrix')]
         self.prefix_bytes = b'/cli:python-matrixscreener /app:matrix '
         self.buffer_size = 1024
-        self.delay = 5e-2 # wait 50ms after sending commands
+        self.delay = 0.1 # wait 100ms for response when sending commands
         self.connect()
 
 
@@ -50,6 +60,8 @@ class CAM:
             Commands as a list of tuples or a bytes string.
             matrixscreener.prefix is allways prepended before sending.
             Example: [('cmd', 'enableall'), ('value', 'true')]
+        delay : float
+            Wait for response in given amount of seconds.
 
         Returns
         -------
@@ -77,7 +89,7 @@ class CAM:
             incomming = self.socket.recv(self.buffer_size)
             debug(b'< ' + incomming)
         except socket.error:
-            return None
+            return []
 
         # split received messages
         # return as list of several messages received
@@ -153,7 +165,7 @@ class CAM:
             ('cmd', 'save'),
             ('fil', str(filename))
         ]
-        return self.send(cmd)
+        return self.send(cmd, delay=0.5)
 
 
     def load_template(self, filename="{ScanningTemplate}matrixscreener.xml"):
@@ -165,7 +177,7 @@ class CAM:
             ('cmd', 'load'),
             ('fil', str(filename))
         ]
-        return self.send(cmd)
+        return self.send(cmd, delay=1)
 
 
     def get_information(self, about='stage'):
@@ -174,11 +186,11 @@ class CAM:
             ('cmd', 'getinfo'),
             ('dev', str(about))
         ]
-        response = self.send(cmd)
-        if len(response) == 0:
-            return None
-        else:
+        response = self.send(cmd, delay=0.5) # wait a half second
+        if response:
             return response[0] # assume we want first response
+        else:
+            return None
 
 
 
