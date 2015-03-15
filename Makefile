@@ -27,9 +27,6 @@ lint:
 	flake8 leicacam test
 
 test:
-	py.test
-
-test-all:
 	tox
 
 coverage:
