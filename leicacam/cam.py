@@ -171,11 +171,38 @@ class CAM:
     def load_template(self, filename="{ScanningTemplate}matrixscreener.xml"):
         """Load scanning template from filename. Template needs to exist
         in database, otherwise it will not load.
+
+        Parameters
+        ----------
+        filename : str
+            Filename to template to load. Filename may contain path also, in
+            such case, the basename will be used. '.xml' will be stripped
+            from the filename if it exists because of a bug; LASAF implicit
+            add '.xml'. If '{ScanningTemplate}' is omitted, it will be added.
+
+                > # load {ScanningTemplate}leicacam.xml
+                > cam.load_template('leicacam')
+
+                > # load {ScanningTemplate}leicacam.xml
+                > cam.load_template('{ScanningTemplate}leicacam')
+
+                > # load {ScanningTemplate}leicacam.xml
+                > cam.load_template('/path/to/{ScanningTemplate}leicacam.xml')
+
+        Returns
+        -------
+        collections.OrderedDict
+            Response from LASAF in an ordered dict.
         """
+        basename = os.path.basename(filename)
+        if basename[-4:] == '.xml':
+            basename = basename[:-4]
+        if basename[:18] != '{ScanningTemplate}':
+            basename = '{ScanningTemplate}' + basename
         cmd = [
             ('sys', '0'),
             ('cmd', 'load'),
-            ('fil', str(filename))
+            ('fil', str(basename))
         ]
         return self.send(cmd, delay=1)
 

@@ -66,3 +66,24 @@ def test_commands(monkeypatch):
     should_be = tuples_as_dict(cmd)
 
     assert information == should_be
+
+def test_load(monkeypatch):
+    "load_template should strip path and .xml from filename"
+    monkeypatch.setattr('socket.socket', EchoSocket)
+
+    # setup cam
+    cam = CAM()
+
+    # monkeypathced EchoSocket will never flush
+    def flush():
+        pass
+    cam.flush = flush
+
+    response = cam.load_template('test')[0]
+    assert response['fil'] == '{ScanningTemplate}test'
+
+    response = cam.load_template('test.xml')[0]
+    assert response['fil'] == '{ScanningTemplate}test'
+
+    response = cam.load_template('/path/to/{ScanningTemplate}test.xml')[0]
+    assert response['fil'] == '{ScanningTemplate}test'
