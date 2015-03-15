@@ -20,12 +20,34 @@ Install using ``pip``...
 Example
 -------
 
-TODO: Write example.
+**communicate with microscope**
 
-API reference
+.. code:: python
+
+    from leicacam import CAM
+
+    cam = CAM()   # initiate and connect, default localhost:8895
+
+    # some commands are created as short hands
+    # start matrix scan
+    response = cam.start_scan()
+    print(response)
+
+    # but you could also create your own command with a list of tuples
+    command = [('cmd', 'enableall'),
+               ('value', 'true')]
+    response = cam.send(command)
+    print(response)
+
+    # or even send it as a bytes string (note the b)
+    command = b'/cmd:enableall /value:true'
+    response = cam.send(command)
+    print(response)
+
+Documentation
 -------------
 
-API reference is at http://leicacam.rtfd.org.
+See available commands in the API reference: http://leicacam.rtfd.org.
 
 Development
 -----------
@@ -42,16 +64,11 @@ Testing
 
 .. code:: bash
 
+    pip install tox
     tox
 
 Build documentation locally
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To build the documentation, you'll need sphinx:
-
-.. code:: bash
-
-    pip install -r docs/requirements.txt
 
 To build the documentation:
 

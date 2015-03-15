@@ -18,11 +18,32 @@ pip install leicacam
 
 ## Example
 
-TODO: Write example.
+**communicate with microscope**
+```python
+from leicacam import CAM
 
-## API reference
+cam = CAM()   # initiate and connect, default localhost:8895
 
-API reference is at http://leicacam.rtfd.org.
+# some commands are created as short hands
+# start matrix scan
+response = cam.start_scan()
+print(response)
+
+# but you could also create your own command with a list of tuples
+command = [('cmd', 'enableall'),
+           ('value', 'true')]
+response = cam.send(command)
+print(response)
+
+# or even send it as a bytes string (note the b)
+command = b'/cmd:enableall /value:true'
+response = cam.send(command)
+print(response)
+```
+
+## Documentation
+
+See available commands in the API reference: http://leicacam.rtfd.org.
 
 ## Development
 Install dependencies and link development version of leicacam to pip:
@@ -33,15 +54,11 @@ pip install -r dev-requirements.txt
 
 ### Testing
 ```bash
+pip install tox
 tox
 ```
 
 ### Build documentation locally
-To build the documentation, you'll need sphinx:
-```bash
-pip install -r docs/requirements.txt
-```
-
 To build the documentation:
 ```bash
 make docs
