@@ -1,6 +1,7 @@
 __author__ = 'Arve Seljebu'
 __email__ = 'arve.seljebu@gmail.com'
-__version__ = '0.0.1'
+from os.path import join, dirname
+__version__ = open(join(dirname(__file__), 'VERSION')).read().strip()
 
 __all__ = ['CAM']
 

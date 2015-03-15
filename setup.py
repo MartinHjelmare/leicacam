@@ -22,7 +22,7 @@ except FileNotFoundError:
 
 setup(
     name='leicacam',
-    version='0.0.1',
+    version=open(os.path.join('leicacam', 'VERSION')).read().strip(),
     description='Control Leica microscopes with python',
     long_description=readme,
     author='Arve Seljebu',
