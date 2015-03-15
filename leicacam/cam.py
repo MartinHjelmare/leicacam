@@ -2,7 +2,7 @@ from time import sleep
 from collections import OrderedDict
 import socket, pydebug, platform, os
 
-# debug with `DEBUG=matrixscreener python script.py`
+# debug with `DEBUG=leicacam python script.py`
 if platform.system() == 'Windows':
     # monkeypatch
     def debug(msg):
@@ -23,9 +23,9 @@ class CAM:
         self.host = host
         self.port = port
         # prefix for all commands
-        self.prefix = [('cli', 'python-matrixscreener'),
+        self.prefix = [('cli', 'python-leicacam'),
                        ('app', 'matrix')]
-        self.prefix_bytes = b'/cli:python-matrixscreener /app:matrix '
+        self.prefix_bytes = b'/cli:python-leicacam /app:matrix '
         self.buffer_size = 1024
         self.delay = 0.1 # wait 100ms for response when sending commands
         self.connect()
@@ -58,7 +58,7 @@ class CAM:
         -----------
         commands : list of tuples or bytes string
             Commands as a list of tuples or a bytes string.
-            matrixscreener.prefix is allways prepended before sending.
+            leicacam.prefix is allways prepended before sending.
             Example: [('cmd', 'enableall'), ('value', 'true')]
         delay : float
             Wait for response in given amount of seconds.
@@ -158,7 +158,7 @@ class CAM:
         return self.send(cmd)
 
 
-    def save_template(self, filename="{ScanningTemplate}matrixscreener.xml"):
+    def save_template(self, filename="{ScanningTemplate}leicacam.xml"):
         "Save scanning template to filename."
         cmd = [
             ('sys', '0'),
@@ -168,7 +168,7 @@ class CAM:
         return self.send(cmd, delay=0.5)
 
 
-    def load_template(self, filename="{ScanningTemplate}matrixscreener.xml"):
+    def load_template(self, filename="{ScanningTemplate}leicacam.xml"):
         """Load scanning template from filename. Template needs to exist
         in database, otherwise it will not load.
 

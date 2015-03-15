@@ -1,7 +1,7 @@
 ## CAM Commands
 Here you can find a brief description of the Leica CAM commands.
 
-Currently matrixscreener have implemented some convenience methods:
+Currently leicacam have implemented some convenience methods:
 - start_scan
 - stop_scan
 - pause_scan
