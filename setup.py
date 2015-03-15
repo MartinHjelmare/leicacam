@@ -24,6 +24,7 @@ setup(
         'leicacam',
     ],
     package_dir={'leicacam': 'leicacam'},
+    package_data={'leicacam': ['VERSION']},
     include_package_data=True,
     install_requires=[
     ],
