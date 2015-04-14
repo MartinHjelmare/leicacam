@@ -27,7 +27,7 @@ class CAM:
                        ('app', 'matrix')]
         self.prefix_bytes = b'/cli:python-leicacam /app:matrix '
         self.buffer_size = 1024
-        self.delay = 0.1 # wait 100ms for response when sending commands
+        self.delay = 0.1 # poll every 100ms when waiting for incomming
         self.connect()
 
 
@@ -51,7 +51,7 @@ class CAM:
             pass
 
 
-    def send(self, commands, delay=None):
+    def send(self, commands):
         """Send commands to LASAF through CAM-socket.
 
         Paramenters
@@ -60,13 +60,11 @@ class CAM:
             Commands as a list of tuples or a bytes string.
             leicacam.prefix is allways prepended before sending.
             Example: [('cmd', 'enableall'), ('value', 'true')]
-        delay : float
-            Wait for response in given amount of seconds.
 
         Returns
         -------
-        OrderedDict
-            Response message from LAS AF as an OrderedDict.
+        int
+            Bytes sent.
         """
         self.flush() # discard any waiting messages
         if type(commands) == bytes:
@@ -74,12 +72,7 @@ class CAM:
         else:
             msg = tuples_as_bytes(self.prefix + commands)
         debug(b'> ' + msg)
-        self.socket.send(msg)
-        if delay:
-            sleep(delay)
-        else:
-            sleep(self.delay)
-        return self.receive()
+        return self.socket.send(msg)
 
 
     def receive(self):
@@ -101,19 +94,22 @@ class CAM:
     def start_scan(self):
         "Starts the matrix scan."
         cmd = [('cmd', 'startscan')]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def stop_scan(self):
         "Stops the matrix scan."
         cmd = [('cmd', 'stopscan')]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def pause_scan(self):
         "Pauses the matrix scan."
         cmd = [('cmd', 'pausescan')]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def enable(self, slide=0, wellx=1, welly=1,
@@ -128,7 +124,8 @@ class CAM:
             ('fieldy', str(fieldy)),
             ('value', 'true')
         ]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def disable(self, slide=0, wellx=1, welly=1,
@@ -143,19 +140,22 @@ class CAM:
             ('fieldy', str(fieldy)),
             ('value', 'false')
         ]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def enable_all(self):
         "Enable all scan fields."
         cmd = [('cmd', 'enableall'), ('value', 'true')]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def disable_all(self):
         "Disable all scan fields."
         cmd = [('cmd', 'enableall'), ('value', 'false')]
-        return self.send(cmd)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def save_template(self, filename="{ScanningTemplate}leicacam.xml"):
@@ -165,7 +165,8 @@ class CAM:
             ('cmd', 'save'),
             ('fil', str(filename))
         ]
-        return self.send(cmd, delay=0.5)
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
 
 
     def load_template(self, filename="{ScanningTemplate}leicacam.xml"):
@@ -204,7 +205,8 @@ class CAM:
             ('cmd', 'load'),
             ('fil', str(basename))
         ]
-        return self.send(cmd, delay=1)
+        self.send(cmd)
+        return self.wait_for(*cmd[1])
 
 
     def get_information(self, about='stage'):
@@ -213,11 +215,8 @@ class CAM:
             ('cmd', 'getinfo'),
             ('dev', str(about))
         ]
-        response = self.send(cmd, delay=0.5) # wait a half second
-        if response:
-            return response[0] # assume we want first response
-        else:
-            return None
+        self.send(cmd) # wait a half second
+        return cam.wait_for(*cmd[1])
 
 
     def wait_for(self, cmd, value=None, timeout=60):
