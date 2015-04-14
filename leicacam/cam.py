@@ -244,11 +244,11 @@ class CAM:
         while True:
             if time() > t:
                 return OrderedDict()
-            msgs = self.cam.receive()
+            msgs = self.receive()
             for msg in msgs:
-                if value and msg.get(key) == value:
+                if value and msg.get(cmd) == value:
                     return msg
-                elif not value and msg.get(key):
+                elif not value and msg.get(cmd):
                     return msg
             sleep(self.delay)
 
