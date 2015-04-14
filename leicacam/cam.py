@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, time
 from collections import OrderedDict
 import socket, pydebug, platform, os
 
@@ -218,6 +218,39 @@ class CAM:
             return response[0] # assume we want first response
         else:
             return None
+
+
+    def wait_for(self, cmd, value=None, timeout=60):
+        """Hang until command is received. If value is supplied, it will hang
+        until ``cmd:value`` is received.
+
+        Parameters
+        ----------
+        cmd : string
+            Command to wait for in bytestring from microscope CAM interface. If
+            ``value`` is falsey, value of received command does not matter.
+        value : string
+            Wait until ``cmd:value`` is received.
+        timeout : int
+            Minutues to wait for command. If timeout is reached, an empty
+            OrderedDict will be returned.
+
+        Returns
+        -------
+        collecteions.OrderedDict
+            Last received messsage or empty message if timeout is reached.
+        """
+        t = time() + timeout*60
+        while True:
+            if time() > t:
+                return OrderedDict()
+            msgs = self.cam.receive()
+            for msg in msgs:
+                if value and msg.get(key) == value:
+                    return msg
+                elif not value and msg.get(key):
+                    return msg
+            sleep(self.delay)
 
 
 
