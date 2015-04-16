@@ -57,8 +57,9 @@ class CAM:
         Paramenters
         -----------
         commands : list of tuples or bytes string
-            Commands as a list of tuples or a bytes string.
-            leicacam.prefix is allways prepended before sending.
+            Commands as a list of tuples or a bytes string. cam.prefix is
+            allways prepended before sending.
+
             Example: [('cmd', 'enableall'), ('value', 'true')]
 
         Returns

@@ -79,11 +79,11 @@ def test_load(monkeypatch):
         pass
     cam.flush = flush
 
-    response = cam.load_template('test')[0]
+    response = cam.load_template('test')
     assert response['fil'] == '{ScanningTemplate}test'
 
-    response = cam.load_template('test.xml')[0]
+    response = cam.load_template('test.xml')
     assert response['fil'] == '{ScanningTemplate}test'
 
-    response = cam.load_template('/path/to/{ScanningTemplate}test.xml')[0]
+    response = cam.load_template('/path/to/{ScanningTemplate}test.xml')
     assert response['fil'] == '{ScanningTemplate}test'
