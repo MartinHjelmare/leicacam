@@ -216,7 +216,7 @@ class CAM:
             ('cmd', 'getinfo'),
             ('dev', str(about))
         ]
-        self.send(cmd) # wait a half second
+        self.send(cmd)
         return self.wait_for(*cmd[1])
 
 
