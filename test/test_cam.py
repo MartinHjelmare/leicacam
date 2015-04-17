@@ -38,10 +38,12 @@ def test_echo(monkeypatch):
         pass
     cam.flush = flush
 
-    echoed = cam.send(cmd)[0]
-    sent   = tuples_as_dict(cam.prefix + cmd)
+    cam.send(cmd)
+    response = cam.receive()[0]
 
-    assert sent == echoed
+    sent = tuples_as_dict(cam.prefix + cmd)
+
+    assert sent == response
 
 def test_commands(monkeypatch):
     "short hand commands should work as intended"
