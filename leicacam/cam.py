@@ -106,6 +106,13 @@ class CAM:
         return self.wait_for(*cmd[0])
 
 
+    def autofocus_scan(self):
+        "Starts the autofocus job."
+        cmd = [('cmd', 'autofocusscan')]
+        self.send(cmd)
+        return self.wait_for(*cmd[0])
+
+
     def pause_scan(self):
         "Pauses the matrix scan."
         cmd = [('cmd', 'pausescan')]
