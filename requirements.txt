@@ -1,5 +1,5 @@
 wheel>=0.22
 setuptools-git
--r docs/requirements.txt
+tox
 
 -e .
