@@ -68,6 +68,6 @@ make docs
 
 [build-status-image]: https://secure.travis-ci.org/arve0/leicacam.png?branch=master
 [travis]: http://travis-ci.org/arve0/leicacam?branch=master
-[pypi-version]: https://pypip.in/version/leicacam/badge.svg
+[pypi-version]: https://img.shields.io/pypi/v/leicacam.svg
 [pypi]: https://pypi.python.org/pypi/leicacam
-[wheel]: https://pypip.in/wheel/leicacam/badge.png
+[wheel]: https://img.shields.io/pypi/wheel/leicacam.svg
