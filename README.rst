@@ -56,7 +56,7 @@ Install dependencies and link development version of leicacam to pip:
 
 .. code:: bash
 
-    pip install -r dev-requirements.txt
+    pip install -r requirements_dev.txt
 
 Testing
 ~~~~~~~

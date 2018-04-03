@@ -48,7 +48,7 @@ See available commands in the API reference: http://leicacam.rtfd.org.
 ## Development
 Install dependencies and link development version of leicacam to pip:
 ```bash
-pip install -r dev-requirements.txt
+pip install -r requirements_dev.txt
 ```
 
 ### Testing
