@@ -1,6 +1,4 @@
-import pytest
-
-from leicacam.cam import *
+from leicacam.cam import CAM, tuples_as_dict
 
 
 class EchoSocket:
