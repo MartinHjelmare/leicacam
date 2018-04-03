@@ -57,14 +57,12 @@ Install dependencies and link development version of leicacam to pip:
 .. code:: bash
 
     pip install -r dev-requirements.txt
-    ./setup.py develop
 
 Testing
 ~~~~~~~
 
 .. code:: bash
 
-    pip install tox
     tox
 
 Build documentation locally
@@ -74,11 +72,12 @@ To build the documentation:
 
 .. code:: bash
 
+    pip install -r docs/requirements.txt
     make docs
 
 .. |build-status-image| image:: https://secure.travis-ci.org/arve0/leicacam.png?branch=master
    :target: http://travis-ci.org/arve0/leicacam?branch=master
-.. |pypi-version| image:: https://pypip.in/version/leicacam/badge.svg
+.. |pypi-version| image:: https://img.shields.io/pypi/v/leicacam.svg
    :target: https://pypi.python.org/pypi/leicacam
-.. |wheel| image:: https://pypip.in/wheel/leicacam/badge.png
+.. |wheel| image:: https://img.shields.io/pypi/wheel/leicacam.svg
    :target: https://pypi.python.org/pypi/leicacam

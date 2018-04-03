@@ -1,5 +1,3 @@
-wheel>=0.22
+pydebug==1.0.3
 setuptools-git
-tox
-
--e .
+wheel>=0.22
