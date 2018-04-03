@@ -28,6 +28,7 @@ class CAM:
     # pylint: disable=too-many-instance-attributes
 
     def __init__(self, host='127.0.0.1', port=8895):
+        """Set up instance."""
         self.host = host
         self.port = port
         # prefix for all commands
@@ -72,6 +73,7 @@ class CAM:
         -------
         int
             Bytes sent.
+
         """
         self.flush()  # discard any waiting messages
         if isinstance(commands, bytes):
@@ -83,7 +85,6 @@ class CAM:
 
     def receive(self):
         """Receive message from socket interface as list of OrderedDict."""
-
         try:
             incomming = self.socket.recv(self.buffer_size)
             debug(b'< ' + incomming)
@@ -198,6 +199,7 @@ class CAM:
         -------
         collections.OrderedDict
             Response from LASAF in an ordered dict.
+
         """
         basename = os.path.basename(filename)
         if basename[-4:] == '.xml':
@@ -241,6 +243,7 @@ class CAM:
         -------
         collecteions.OrderedDict
             Last received messsage or empty message if timeout is reached.
+
         """
         wait = time() + timeout * 60
         while True:
@@ -272,6 +275,7 @@ def tuples_as_bytes(cmds):
     -------
     bytes
         Sequence of /key:val.
+
     """
     cmds = OrderedDict(cmds)  # override equal keys
     tmp = []
@@ -293,6 +297,7 @@ def tuples_as_dict(_list):
     Returns
     -------
     collections.OrderedDict
+
     """
     _dict = OrderedDict()
     for key, val in _list:
@@ -314,6 +319,7 @@ def bytes_as_dict(msg):
     -------
     collections.OrderedDict
         With /key:val => dict[key] = val.
+
     """
     # decode bytes, assume '/' in start
     cmd_strings = msg.decode()[1:].split(r' /')
