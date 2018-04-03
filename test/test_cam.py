@@ -1,5 +1,7 @@
-from leicacam.cam import *
 import pytest
+
+from leicacam.cam import *
+
 
 class EchoSocket:
     "Dummy echo socket for mocking."
@@ -22,6 +24,8 @@ class EchoSocket:
 #- key (here cli) overrided if defined several times
 #- prefix added
 #- types (integer, float) should be converted to strings
+
+
 def test_echo(monkeypatch):
     "Prefix + command sent should be same as echoed socket message."
     # mock socket
@@ -44,6 +48,7 @@ def test_echo(monkeypatch):
     sent = tuples_as_dict(cam.prefix + cmd)
 
     assert sent == response
+
 
 def test_commands(monkeypatch):
     "short hand commands should work as intended"
@@ -68,6 +73,7 @@ def test_commands(monkeypatch):
     should_be = tuples_as_dict(cmd)
 
     assert information == should_be
+
 
 def test_load(monkeypatch):
     "load_template should strip path and .xml from filename"
