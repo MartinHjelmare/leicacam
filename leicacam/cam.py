@@ -1,4 +1,6 @@
 """Provide an interface to the CAM server."""
+from __future__ import print_function
+
 import os
 import platform
 import socket
@@ -22,7 +24,7 @@ else:
     debug = pydebug.debug('leicacam')  # pylint: disable=invalid-name
 
 
-class CAM:
+class CAM(object):
     """Driver for LASAF Computer Assisted Microscopy."""
 
     # pylint: disable=too-many-instance-attributes
