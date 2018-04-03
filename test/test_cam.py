@@ -2,7 +2,7 @@
 from leicacam.cam import CAM, tuples_as_dict
 
 
-class EchoSocket:
+class EchoSocket(object):
     """Dummy echo socket for mocking."""
 
     msg = ''
