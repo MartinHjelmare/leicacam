@@ -37,7 +37,7 @@ class CAM:
         self.connect()
 
     def connect(self):
-        """Connects to LASAF through a CAM-socket."""
+        """Connect to LASAF through a CAM-socket."""
         self.socket = socket.socket()
         self.socket.connect((self.host, self.port))
         self.socket.settimeout(False)  # non-blocking
@@ -95,25 +95,25 @@ class CAM:
 
     # convinience functions for commands
     def start_scan(self):
-        """Starts the matrix scan."""
+        """Start the matrix scan."""
         cmd = [('cmd', 'startscan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def stop_scan(self):
-        """Stops the matrix scan."""
+        """Stop the matrix scan."""
         cmd = [('cmd', 'stopscan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def autofocus_scan(self):
-        """Starts the autofocus job."""
+        """Start the autofocus job."""
         cmd = [('cmd', 'autofocusscan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def pause_scan(self):
-        """Pauses the matrix scan."""
+        """Pause the matrix scan."""
         cmd = [('cmd', 'pausescan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
