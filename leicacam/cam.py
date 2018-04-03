@@ -1,3 +1,4 @@
+"""Provide an interface to the CAM server."""
 from time import sleep, time
 from collections import OrderedDict
 import socket, pydebug, platform, os
