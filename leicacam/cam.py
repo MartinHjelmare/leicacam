@@ -1,11 +1,19 @@
-from time import sleep, time
+"""Provide an interface to the CAM server."""
+from __future__ import print_function
+
+import os
+import platform
+import socket
 from collections import OrderedDict
-import socket, pydebug, platform, os
+from time import sleep, time
+
+import pydebug
 
 # debug with `DEBUG=leicacam python script.py`
 if platform.system() == 'Windows':
     # monkeypatch
     def debug(msg):
+        """Debug on Windows."""
         try:
             dbg = os.environ['DEBUG']
             if dbg == 'leicacam' or dbg == '*':
@@ -13,13 +21,16 @@ if platform.system() == 'Windows':
         except KeyError:
             pass
 else:
-    debug = pydebug.debug('leicacam')
+    debug = pydebug.debug('leicacam')  # pylint: disable=invalid-name
 
 
-class CAM:
-    "Driver for LASAF Computer Assisted Microscopy."
+class CAM(object):
+    """Driver for LASAF Computer Assisted Microscopy."""
+
+    # pylint: disable=too-many-instance-attributes
 
     def __init__(self, host='127.0.0.1', port=8895):
+        """Set up instance."""
         self.host = host
         self.port = port
         # prefix for all commands
@@ -27,29 +38,27 @@ class CAM:
                        ('app', 'matrix')]
         self.prefix_bytes = b'/cli:python-leicacam /app:matrix '
         self.buffer_size = 1024
-        self.delay = 0.1 # poll every 100ms when waiting for incomming
+        self.delay = 0.1  # poll every 100ms when waiting for incomming
         self.connect()
 
-
     def connect(self):
-        "Connects to LASAF through a CAM-socket."
+        """Connect to LASAF through a CAM-socket."""
         self.socket = socket.socket()
         self.socket.connect((self.host, self.port))
-        self.socket.settimeout(False) # non-blocking
-        sleep(self.delay) # wait for response
-        self.welcome_msg = self.socket.recv(self.buffer_size) # receive welcome message
-
+        self.socket.settimeout(False)  # non-blocking
+        sleep(self.delay)  # wait for response
+        self.welcome_msg = self.socket.recv(
+            self.buffer_size)  # receive welcome message
 
     def flush(self):
-        "Flush incomming socket messages."
+        """Flush incomming socket messages."""
         debug('flushing incomming socket messages')
         try:
-            while(True):
+            while True:
                 msg = self.socket.recv(self.buffer_size)
                 debug(b'< ' + msg)
         except socket.error:
             pass
-
 
     def send(self, commands):
         """Send commands to LASAF through CAM-socket.
@@ -66,19 +75,18 @@ class CAM:
         -------
         int
             Bytes sent.
+
         """
-        self.flush() # discard any waiting messages
-        if type(commands) == bytes:
+        self.flush()  # discard any waiting messages
+        if isinstance(commands, bytes):
             msg = self.prefix_bytes + commands
         else:
             msg = tuples_as_bytes(self.prefix + commands)
         debug(b'> ' + msg)
         return self.socket.send(msg)
 
-
     def receive(self):
-        "Receive message from socket interface as list of OrderedDict."
-
+        """Receive message from socket interface as list of OrderedDict."""
         try:
             incomming = self.socket.recv(self.buffer_size)
             debug(b'< ' + incomming)
@@ -90,39 +98,34 @@ class CAM:
         msgs = incomming.splitlines()
         return [bytes_as_dict(msg) for msg in msgs]
 
-
     # convinience functions for commands
     def start_scan(self):
-        "Starts the matrix scan."
+        """Start the matrix scan."""
         cmd = [('cmd', 'startscan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def stop_scan(self):
-        "Stops the matrix scan."
+        """Stop the matrix scan."""
         cmd = [('cmd', 'stopscan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def autofocus_scan(self):
-        "Starts the autofocus job."
+        """Start the autofocus job."""
         cmd = [('cmd', 'autofocusscan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def pause_scan(self):
-        "Pauses the matrix scan."
+        """Pause the matrix scan."""
         cmd = [('cmd', 'pausescan')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
-    def enable(self, slide=0, wellx=1, welly=1,
-               fieldx=1, fieldy=1):
-        "Enable a given scan field."
+    def enable(self, slide=0, wellx=1, welly=1, fieldx=1, fieldy=1):
+        """Enable a given scan field."""
+        # pylint: disable=too-many-arguments
         cmd = [
             ('cmd', 'enable'),
             ('slide', str(slide)),
@@ -135,10 +138,9 @@ class CAM:
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
-    def disable(self, slide=0, wellx=1, welly=1,
-               fieldx=1, fieldy=1):
-        "Disable a given scan field."
+    def disable(self, slide=0, wellx=1, welly=1, fieldx=1, fieldy=1):
+        """Disable a given scan field."""
+        # pylint: disable=too-many-arguments
         cmd = [
             ('cmd', 'enable'),
             ('slide', str(slide)),
@@ -151,23 +153,20 @@ class CAM:
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def enable_all(self):
-        "Enable all scan fields."
+        """Enable all scan fields."""
         cmd = [('cmd', 'enableall'), ('value', 'true')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def disable_all(self):
-        "Disable all scan fields."
+        """Disable all scan fields."""
         cmd = [('cmd', 'enableall'), ('value', 'false')]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def save_template(self, filename="{ScanningTemplate}leicacam.xml"):
-        "Save scanning template to filename."
+        """Save scanning template to filename."""
         cmd = [
             ('sys', '0'),
             ('cmd', 'save'),
@@ -176,10 +175,10 @@ class CAM:
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
-
     def load_template(self, filename="{ScanningTemplate}leicacam.xml"):
-        """Load scanning template from filename. Template needs to exist
-        in database, otherwise it will not load.
+        """Load scanning template from filename.
+
+        Template needs to exist in database, otherwise it will not load.
 
         Parameters
         ----------
@@ -202,6 +201,7 @@ class CAM:
         -------
         collections.OrderedDict
             Response from LASAF in an ordered dict.
+
         """
         basename = os.path.basename(filename)
         if basename[-4:] == '.xml':
@@ -216,9 +216,8 @@ class CAM:
         self.send(cmd)
         return self.wait_for(*cmd[1])
 
-
     def get_information(self, about='stage'):
-        "Get information about given keyword. Defaults to stage."
+        """Get information about given keyword. Defaults to stage."""
         cmd = [
             ('cmd', 'getinfo'),
             ('dev', str(about))
@@ -226,10 +225,10 @@ class CAM:
         self.send(cmd)
         return self.wait_for(*cmd[1])
 
-
     def wait_for(self, cmd, value=None, timeout=60):
-        """Hang until command is received. If value is supplied, it will hang
-        until ``cmd:value`` is received.
+        """Hang until command is received.
+
+        If value is supplied, it will hang until ``cmd:value`` is received.
 
         Parameters
         ----------
@@ -246,10 +245,11 @@ class CAM:
         -------
         collecteions.OrderedDict
             Last received messsage or empty message if timeout is reached.
+
         """
-        t = time() + timeout*60
+        wait = time() + timeout * 60
         while True:
-            if time() > t:
+            if time() > wait:
                 return OrderedDict()
             msgs = self.receive()
             for msg in msgs:
@@ -258,7 +258,6 @@ class CAM:
                 elif not value and msg.get(cmd):
                     return msg
             sleep(self.delay)
-
 
 
 ##
@@ -278,10 +277,11 @@ def tuples_as_bytes(cmds):
     -------
     bytes
         Sequence of /key:val.
+
     """
-    cmds = OrderedDict(cmds) # override equal keys
+    cmds = OrderedDict(cmds)  # override equal keys
     tmp = []
-    for key,val in cmds.items():
+    for key, val in cmds.items():
         key = str(key)
         val = str(val)
         tmp.append('/' + key + ':' + val)
@@ -289,8 +289,7 @@ def tuples_as_bytes(cmds):
 
 
 def tuples_as_dict(_list):
-    """Translate a list of tuples to OrderedDict with key and val
-    as strings.
+    """Translate a list of tuples to OrderedDict with key and val as strings.
 
     Parameters
     ----------
@@ -300,9 +299,10 @@ def tuples_as_dict(_list):
     Returns
     -------
     collections.OrderedDict
+
     """
     _dict = OrderedDict()
-    for key,val in _list:
+    for key, val in _list:
         key = str(key)
         val = str(val)
         _dict[key] = val
@@ -321,6 +321,7 @@ def bytes_as_dict(msg):
     -------
     collections.OrderedDict
         With /key:val => dict[key] = val.
+
     """
     # decode bytes, assume '/' in start
     cmd_strings = msg.decode()[1:].split(r' /')
@@ -334,6 +335,6 @@ def bytes_as_dict(msg):
         elif len(unpacked) < 2:
             continue
         else:
-            key,val = unpacked
+            key, val = unpacked
         cmds[key] = val
     return cmds

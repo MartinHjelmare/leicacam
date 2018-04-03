@@ -1,29 +1,37 @@
-from leicacam.cam import *
-import pytest
+"""Tests for cam module."""
+from leicacam.cam import CAM, tuples_as_dict
 
-class EchoSocket:
-    "Dummy echo socket for mocking."
+
+class EchoSocket(object):
+    """Dummy echo socket for mocking."""
+
     msg = ''
 
     def send(self, msg):
+        """Send a message."""
         self.msg = msg
         return len(msg)
 
     def recv(self, buffer_size):
+        """Receive a message."""
         return self.msg[0:buffer_size]
 
     def connect(self, where):
+        """Connect to the socket."""
         pass
 
     def settimeout(self, timeout):
+        """Set a timeout."""
         pass
 
 # TEST
-#- key (here cli) overrided if defined several times
-#- prefix added
-#- types (integer, float) should be converted to strings
+# key (here cli) overrided if defined several times
+# prefix added
+# types (integer, float) should be converted to strings
+
+
 def test_echo(monkeypatch):
-    "Prefix + command sent should be same as echoed socket message."
+    """Prefix + command sent should be same as echoed socket message."""
     # mock socket
     monkeypatch.setattr("socket.socket", EchoSocket)
 
@@ -35,6 +43,7 @@ def test_echo(monkeypatch):
 
     # monkeypathced EchoSocket will never flush
     def flush():
+        """Flush the socket."""
         pass
     cam.flush = flush
 
@@ -45,8 +54,9 @@ def test_echo(monkeypatch):
 
     assert sent == response
 
+
 def test_commands(monkeypatch):
-    "short hand commands should work as intended"
+    """Short hand commands should work as intended."""
     # mock socket
     monkeypatch.setattr("socket.socket", EchoSocket)
 
@@ -55,6 +65,7 @@ def test_commands(monkeypatch):
 
     # monkeypathced EchoSocket will never flush
     def flush():
+        """Flush the socket."""
         pass
     cam.flush = flush
 
@@ -69,8 +80,9 @@ def test_commands(monkeypatch):
 
     assert information == should_be
 
+
 def test_load(monkeypatch):
-    "load_template should strip path and .xml from filename"
+    """load_template should strip path and .xml from filename."""
     monkeypatch.setattr('socket.socket', EchoSocket)
 
     # setup cam
@@ -78,6 +90,7 @@ def test_load(monkeypatch):
 
     # monkeypathced EchoSocket will never flush
     def flush():
+        """Flush the socket."""
         pass
     cam.flush = flush
 

@@ -24,7 +24,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 leicacam test
+	tox -e lint
 
 test:
 	tox
