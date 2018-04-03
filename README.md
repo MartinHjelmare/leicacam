@@ -49,7 +49,6 @@ See available commands in the API reference: http://leicacam.rtfd.org.
 Install dependencies and link development version of leicacam to pip:
 ```bash
 pip install -r dev-requirements.txt
-./setup.py develop
 ```
 
 ### Testing
@@ -60,7 +59,7 @@ tox
 ### Build documentation locally
 To build the documentation:
 ```bash
-pip -r docs/requirements.txt
+pip install -r docs/requirements.txt
 make docs
 ```
 
