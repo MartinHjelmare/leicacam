@@ -25,6 +25,8 @@ else:
 class CAM:
     """Driver for LASAF Computer Assisted Microscopy."""
 
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(self, host='127.0.0.1', port=8895):
         self.host = host
         self.port = port
@@ -120,6 +122,7 @@ class CAM:
 
     def enable(self, slide=0, wellx=1, welly=1, fieldx=1, fieldy=1):
         """Enable a given scan field."""
+        # pylint: disable=too-many-arguments
         cmd = [
             ('cmd', 'enable'),
             ('slide', str(slide)),
@@ -134,6 +137,7 @@ class CAM:
 
     def disable(self, slide=0, wellx=1, welly=1, fieldx=1, fieldy=1):
         """Disable a given scan field."""
+        # pylint: disable=too-many-arguments
         cmd = [
             ('cmd', 'enable'),
             ('slide', str(slide)),
