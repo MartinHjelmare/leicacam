@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
+"""Set up package."""
 import os
-import sys
 from setuptools import setup
 
 
@@ -11,9 +10,12 @@ try:
 except FileNotFoundError:
     readme = ''
 
+with open(os.path.join('leicacam', 'VERSION')) as version_file:
+    VERSION = version_file.read().strip()
+
 setup(
     name='leicacam',
-    version=open(os.path.join('leicacam', 'VERSION')).read().strip(),
+    version=VERSION,
     description='Control Leica microscopes with python',
     long_description=readme,
     author='Arve Seljebu',
