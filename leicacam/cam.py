@@ -69,12 +69,20 @@ class CAM(object):
             Commands as a list of tuples or a bytes string. cam.prefix is
             allways prepended before sending.
 
-            Example: [('cmd', 'enableall'), ('value', 'true')]
-
         Returns
         -------
         int
             Bytes sent.
+
+        Example
+        -------
+        ::
+
+            >>> # send list of tuples
+            >>> cam.send([('cmd', 'enableall'), ('value', 'true')])
+
+            >>> # send bytes string
+            >>> cam.send(b'/cmd:enableall /value:true')
 
         """
         self.flush()  # discard any waiting messages
@@ -188,19 +196,23 @@ class CAM(object):
             from the filename if it exists because of a bug; LASAF implicit
             add '.xml'. If '{ScanningTemplate}' is omitted, it will be added.
 
-                > # load {ScanningTemplate}leicacam.xml
-                > cam.load_template('leicacam')
-
-                > # load {ScanningTemplate}leicacam.xml
-                > cam.load_template('{ScanningTemplate}leicacam')
-
-                > # load {ScanningTemplate}leicacam.xml
-                > cam.load_template('/path/to/{ScanningTemplate}leicacam.xml')
-
         Returns
         -------
         collections.OrderedDict
             Response from LASAF in an ordered dict.
+
+        Example
+        -------
+        ::
+
+            >>> # load {ScanningTemplate}leicacam.xml
+            >>> cam.load_template('leicacam')
+
+            >>> # load {ScanningTemplate}leicacam.xml
+            >>> cam.load_template('{ScanningTemplate}leicacam')
+
+            >>> # load {ScanningTemplate}leicacam.xml
+            >>> cam.load_template('/path/to/{ScanningTemplate}leicacam.xml')
 
         """
         basename = os.path.basename(filename)
@@ -271,12 +283,18 @@ def tuples_as_bytes(cmds):
     ----------
     cmds : list of tuples
         List of commands as tuples.
-        Example: [('cmd', 'val'), ('cmd2', 'val2')]
 
     Returns
     -------
     bytes
         Sequence of /key:val.
+
+    Example
+    -------
+    ::
+
+        >>> tuples_as_bytes([('cmd', 'val'), ('cmd2', 'val2')])
+        b'/cmd:val /cmd2:val2'
 
     """
     cmds = OrderedDict(cmds)  # override equal keys
@@ -294,11 +312,17 @@ def tuples_as_dict(_list):
     Parameters
     ----------
     _list : list of tuples
-        Example: [('cmd', 'val'), ('cmd2', 'val2')]
 
     Returns
     -------
     collections.OrderedDict
+
+    Example
+    -------
+    ::
+
+        >>> tuples_as_dict([('cmd', 'val'), ('cmd2', 'val2')])
+        OrderedDict([('cmd', 'val'), ('cmd2', 'val2')])
 
     """
     _dict = OrderedDict()
