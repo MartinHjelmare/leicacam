@@ -63,8 +63,8 @@ class CAM(object):
     def send(self, commands):
         """Send commands to LASAF through CAM-socket.
 
-        Paramenters
-        -----------
+        Parameters
+        ----------
         commands : list of tuples or bytes string
             Commands as a list of tuples or a bytes string. cam.prefix is
             allways prepended before sending.
