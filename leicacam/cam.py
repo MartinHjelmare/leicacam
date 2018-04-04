@@ -255,7 +255,7 @@ class CAM(object):
 
         Returns
         -------
-        collecteions.OrderedDict
+        collections.OrderedDict
             Last received messsage or empty message if timeout is reached.
 
         """
