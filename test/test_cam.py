@@ -101,6 +101,98 @@ def test_commands(cam):
 
     assert information == should_be
 
+    # start_scan
+    cmd = cam.prefix + [
+        ('cmd', 'startscan'),
+    ]
+
+    response = cam.start_scan()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # stop_scan
+    cmd = cam.prefix + [
+        ('cmd', 'stopscan'),
+    ]
+
+    response = cam.stop_scan()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # autofocus_scan
+    cmd = cam.prefix + [
+        ('cmd', 'autofocusscan'),
+    ]
+
+    response = cam.autofocus_scan()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # pause_scan
+    cmd = cam.prefix + [
+        ('cmd', 'pausescan'),
+    ]
+
+    response = cam.pause_scan()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # enable
+    cmd = [
+        ('cmd', 'enable'),
+        ('slide', str(0)),
+        ('wellx', str(1)),
+        ('welly', str(1)),
+        ('fieldx', str(1)),
+        ('fieldy', str(1)),
+        ('value', 'true')
+    ]
+    cmd = cam.prefix + cmd
+
+    response = cam.enable()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # disable
+    cmd = [
+        ('cmd', 'enable'),
+        ('slide', str(0)),
+        ('wellx', str(1)),
+        ('welly', str(1)),
+        ('fieldx', str(1)),
+        ('fieldy', str(1)),
+        ('value', 'false')
+    ]
+    cmd = cam.prefix + cmd
+
+    response = cam.disable()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # enable_all
+    cmd = [('cmd', 'enableall'), ('value', 'true')]
+    cmd = cam.prefix + cmd
+
+    response = cam.enable_all()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+    # disable_all
+    cmd = [('cmd', 'enableall'), ('value', 'false')]
+    cmd = cam.prefix + cmd
+
+    response = cam.disable_all()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
 
 def test_load(cam):
     """load_template should strip path and .xml from filename."""
