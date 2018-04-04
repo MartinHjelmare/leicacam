@@ -64,7 +64,7 @@ class CAM(object):
         """Send commands to LASAF through CAM-socket.
 
         Parameters
-        -----------
+        ----------
         commands : list of tuples or bytes string
             Commands as a list of tuples or a bytes string. cam.prefix is
             allways prepended before sending.
