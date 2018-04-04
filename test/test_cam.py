@@ -1,5 +1,27 @@
 """Tests for cam module."""
-from leicacam.cam import CAM, tuples_as_dict
+import pytest
+from mock import patch
+
+from leicacam.cam import CAM, bytes_as_dict, tuples_as_dict
+
+# pylint: disable=redefined-outer-name
+
+
+def flush():
+    """Flush the socket."""
+    pass
+
+
+@pytest.fixture
+def cam():
+    """Mock a CAM instance."""
+    with patch('socket.socket') as mock_socket_class:
+        mock_socket = EchoSocket()
+        mock_socket_class.return_value = mock_socket
+        mock_cam = CAM()
+        mock_cam.flush = flush
+
+        yield mock_cam
 
 
 class EchoSocket(object):
@@ -30,22 +52,10 @@ class EchoSocket(object):
 # types (integer, float) should be converted to strings
 
 
-def test_echo(monkeypatch):
+def test_echo(cam):
     """Prefix + command sent should be same as echoed socket message."""
-    # mock socket
-    monkeypatch.setattr("socket.socket", EchoSocket)
-
-    # setup cam
-    cam = CAM()
-
     cmd = [('cli', 'custom'), ('cmd', 'enableall'), ('value', 'true'),
            ('integer', 1234), ('float', 0.00234)]
-
-    # monkeypathced EchoSocket will never flush
-    def flush():
-        """Flush the socket."""
-        pass
-    cam.flush = flush
 
     cam.send(cmd)
     response = cam.receive()[0]
@@ -55,20 +65,19 @@ def test_echo(monkeypatch):
     assert sent == response
 
 
-def test_commands(monkeypatch):
+def test_send_bytes(cam):
+    """Test send a bytes string."""
+    cmd = b'/cmd:enableall /value:true'
+    cam.send(cmd)
+    response = cam.receive()[0]
+
+    sent = bytes_as_dict(cam.prefix_bytes + cmd)
+
+    assert sent == response
+
+
+def test_commands(cam):
     """Short hand commands should work as intended."""
-    # mock socket
-    monkeypatch.setattr("socket.socket", EchoSocket)
-
-    # setup cam
-    cam = CAM()
-
-    # monkeypathced EchoSocket will never flush
-    def flush():
-        """Flush the socket."""
-        pass
-    cam.flush = flush
-
     # get_information
     cmd = cam.prefix + [
         ('cmd', 'getinfo'),
@@ -81,19 +90,8 @@ def test_commands(monkeypatch):
     assert information == should_be
 
 
-def test_load(monkeypatch):
+def test_load(cam):
     """load_template should strip path and .xml from filename."""
-    monkeypatch.setattr('socket.socket', EchoSocket)
-
-    # setup cam
-    cam = CAM()
-
-    # monkeypathced EchoSocket will never flush
-    def flush():
-        """Flush the socket."""
-        pass
-    cam.flush = flush
-
     response = cam.load_template('test')
     assert response['fil'] == '{ScanningTemplate}test'
 
