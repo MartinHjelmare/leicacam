@@ -1,6 +1,8 @@
 """Tests for cam module."""
+import socket
+
 import pytest
-from mock import patch
+from mock import MagicMock, patch
 
 from leicacam.cam import CAM, bytes_as_dict, tuples_as_dict
 
@@ -74,6 +76,16 @@ def test_send_bytes(cam):
     sent = bytes_as_dict(cam.prefix_bytes + cmd)
 
     assert sent == response
+
+
+def test_receive_error(cam):
+    """Test receive method when a socket error happens."""
+    cam.socket.recv = MagicMock()
+    cam.socket.recv.side_effect = socket.error()
+    response = cam.receive()
+
+    assert isinstance(response, list)
+    assert not response
 
 
 def test_commands(cam):
