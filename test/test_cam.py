@@ -14,7 +14,7 @@ def flush():
 
 @pytest.fixture
 def cam():
-    """Mock a CAM instance."""
+    """Yield a CAM instance with a mock socket."""
     with patch('socket.socket') as mock_socket_class:
         mock_socket = EchoSocket()
         mock_socket_class.return_value = mock_socket
