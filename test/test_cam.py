@@ -1,10 +1,11 @@
 """Tests for cam module."""
 import socket
+from collections import OrderedDict
 
 import pytest
 from mock import MagicMock, patch
 
-from leicacam.cam import CAM, bytes_as_dict, tuples_as_dict
+from leicacam.cam import CAM, bytes_as_dict, tuples_as_bytes, tuples_as_dict
 
 # pylint: disable=redefined-outer-name
 
@@ -78,6 +79,24 @@ def test_send_bytes(cam):
     assert sent == response
 
 
+def test_flush():
+    """Test flush method."""
+    cmd = b'/cmd:startscan\n'
+    mock_recv = MagicMock()
+    mock_recv.side_effect = [cmd, socket.error()]
+    with patch('socket.socket') as mock_socket_class:
+        mock_socket = MagicMock()
+        mock_socket_class.return_value = mock_socket
+        cam = CAM()
+        cam.socket.recv = mock_recv
+
+        cam.flush()
+
+    assert len(mock_recv.mock_calls) == 2
+    _, args, _ = mock_recv.mock_calls[0]
+    assert args == (1024, )
+
+
 def test_receive_error(cam):
     """Test receive method when a socket error happens."""
     cam.socket.recv = MagicMock()
@@ -91,10 +110,7 @@ def test_receive_error(cam):
 def test_commands(cam):
     """Short hand commands should work as intended."""
     # get_information
-    cmd = cam.prefix + [
-        ('cmd', 'getinfo'),
-        ('dev', 'stage')
-    ]
+    cmd = cam.prefix + [('cmd', 'getinfo'), ('dev', 'stage')]
 
     information = cam.get_information()
     should_be = tuples_as_dict(cmd)
@@ -102,9 +118,7 @@ def test_commands(cam):
     assert information == should_be
 
     # start_scan
-    cmd = cam.prefix + [
-        ('cmd', 'startscan'),
-    ]
+    cmd = cam.prefix + [('cmd', 'startscan')]
 
     response = cam.start_scan()
     should_be = tuples_as_dict(cmd)
@@ -112,9 +126,7 @@ def test_commands(cam):
     assert response == should_be
 
     # stop_scan
-    cmd = cam.prefix + [
-        ('cmd', 'stopscan'),
-    ]
+    cmd = cam.prefix + [('cmd', 'stopscan')]
 
     response = cam.stop_scan()
     should_be = tuples_as_dict(cmd)
@@ -122,9 +134,7 @@ def test_commands(cam):
     assert response == should_be
 
     # autofocus_scan
-    cmd = cam.prefix + [
-        ('cmd', 'autofocusscan'),
-    ]
+    cmd = cam.prefix + [('cmd', 'autofocusscan')]
 
     response = cam.autofocus_scan()
     should_be = tuples_as_dict(cmd)
@@ -132,9 +142,7 @@ def test_commands(cam):
     assert response == should_be
 
     # pause_scan
-    cmd = cam.prefix + [
-        ('cmd', 'pausescan'),
-    ]
+    cmd = cam.prefix + [('cmd', 'pausescan')]
 
     response = cam.pause_scan()
     should_be = tuples_as_dict(cmd)
@@ -193,6 +201,18 @@ def test_commands(cam):
 
     assert response == should_be
 
+    # save_template
+    cmd = [
+        ('sys', '0'), ('cmd', 'save'),
+        ('fil', '{ScanningTemplate}leicacam.xml'),
+    ]
+    cmd = cam.prefix + cmd
+
+    response = cam.save_template()
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
 
 def test_load(cam):
     """load_template should strip path and .xml from filename."""
@@ -204,3 +224,49 @@ def test_load(cam):
 
     response = cam.load_template('/path/to/{ScanningTemplate}test.xml')
     assert response['fil'] == '{ScanningTemplate}test'
+
+
+def test_wait_for_timeout(cam):
+    """Test wait_for when timeout expires."""
+    cmd = 'cmd'
+    value = 'stopscan'
+    response = cam.wait_for(cmd, value, 0)
+
+    assert response == OrderedDict()
+
+
+def test_wait_for_any_value(cam):
+    """Test wait_for a command and any value."""
+    cmd = [('cmd', 'startscan')]
+    cam.send(cmd)
+    response = cam.wait_for('cmd', None)
+
+    cmd = cam.prefix + cmd
+    should_be = tuples_as_dict(cmd)
+
+    assert response == should_be
+
+
+def test_receive_colon_string(cam):
+    """Test bytes_as_dict function receiving a string with colon."""
+    cmd = [('relpath', 'C:\\image.ome.tif')]
+    cam.socket.recv = MagicMock()
+    cam.socket.recv.return_value = tuples_as_bytes(cmd)
+    response = cam.receive()
+
+    assert isinstance(response, list)
+    for msg in response:
+        assert msg == OrderedDict(cmd)
+
+
+def test_receive_bad_string(cam):
+    """Test bytes_as_dict function receiving an incomplete command."""
+    cmd = [('cmd', 'enableall')]
+    cmd_string = '/cmd:enableall /value'
+    cam.socket.recv = MagicMock()
+    cam.socket.recv.return_value = cmd_string.encode()
+    response = cam.receive()
+
+    assert isinstance(response, list)
+    for msg in response:
+        assert msg == OrderedDict(cmd)
