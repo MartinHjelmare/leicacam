@@ -1,14 +1,16 @@
-.PHONY: help clean clean-pyc clean-build list test test-all coverage docs release sdist
+.PHONY: help clean clean-pyc clean-build list test test-all coverage docs release test-release sdist
 
 help:
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
-	@echo "lint - check style with flake8"
+	@echo "lint - check style with flake8, pylint and pydocstyle"
 	@echo "test - run tests quickly with the default Python"
-	@echo "testall - run tests on every Python version with tox"
+	@echo "test-all - run tests on every Python version with tox"
 	@echo "coverage - check code coverage quickly with the default Python"
 	@echo "docs - generate Sphinx HTML documentation, including API docs"
-	@echo "release - package and upload a release"
+	@echo "api-docs - generate leicacam rst file for Sphinx HTML documentation"
+	@echo "release - package and upload a release to PyPI"
+	@echo "test-release - package and upload a release to test PyPI"
 	@echo "sdist - package"
 
 clean: clean-build clean-pyc
@@ -27,16 +29,16 @@ lint:
 	tox -e lint
 
 test:
+	pytest -v test/
+
+test-all:
 	tox
 
 coverage:
-	coverage run --source leicacam setup.py test
-	coverage report -m
-	coverage html
-	open htmlcov/index.html
+	pytest -v --cov-report term-missing --cov=leicacam test/
 
 api-docs:
-	sphinx-apidoc -Mf -o docs/ leicacam
+	sphinx-apidoc -MfT -o docs/ leicacam
 
 docs:
 	$(MAKE) -C docs clean
@@ -44,13 +46,16 @@ docs:
 	open docs/_build/html/index.html
 
 release: clean rst
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
+
+test-release: clean rst
+	python setup.py sdist bdist_wheel
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 rst:
 	if type pandoc; then pandoc --from=markdown --to=rst README.md -o README.rst; fi
 
 sdist: clean rst
-	python setup.py sdist
-	python setup.py bdist_wheel upload
+	python setup.py sdist bdist_wheel
 	ls -l dist

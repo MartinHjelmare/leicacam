@@ -1,0 +1,4 @@
+pygcgen==0.2.3
+setuptools-git
+twine>=1.11.0
+wheel>=0.31.0
