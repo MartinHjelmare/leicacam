@@ -1,0 +1,2 @@
+setuptools-git
+wheel>=0.22
