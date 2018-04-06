@@ -1,4 +1,6 @@
 -r requirements.txt
+-r requirements_pypi.txt
+-r requirements_test.txt
 -r docs/requirements.txt
 tox
 
