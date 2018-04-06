@@ -1,6 +1,7 @@
-.PHONY: help clean clean-pyc clean-build list test test-all coverage docs release test-release sdist
+.PHONY: help clean clean-build clean-pyc lint test test-all coverage api-docs docs release test-release rst sdist
 
 help:
+	@echo "clean - run both clean-build and clean-pyc"
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
 	@echo "lint - check style with flake8, pylint and pydocstyle"
@@ -11,6 +12,7 @@ help:
 	@echo "api-docs - generate leicacam rst file for Sphinx HTML documentation"
 	@echo "release - package and upload a release to PyPI"
 	@echo "test-release - package and upload a release to test PyPI"
+	@echo "rst - convert the markdown readme file to rst and add that file"
 	@echo "sdist - package"
 
 clean: clean-build clean-pyc
