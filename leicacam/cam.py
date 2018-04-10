@@ -19,7 +19,11 @@ def logger(function):
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
         """Wrap function."""
-        _LOGGER.debug(*args)
+        sep = kwargs.get('sep', ' ')
+        end = kwargs.get('end', '\n')
+        out = sep.join([repr(x) for x in args])
+        out = out + end
+        _LOGGER.debug(out)
         return function(*args, **kwargs)
     return wrapper
 
