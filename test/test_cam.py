@@ -16,10 +16,17 @@ def flush():
 
 
 @pytest.fixture
-def cam():
+def mock_socket():
+    """Return a mock echo socket."""
+    echo_socket = EchoSocket()
+    echo_socket.close = MagicMock()
+    return echo_socket
+
+
+@pytest.fixture
+def cam(mock_socket):
     """Yield a CAM instance with a mock socket."""
     with patch('socket.socket') as mock_socket_class:
-        mock_socket = EchoSocket()
         mock_socket_class.return_value = mock_socket
         mock_cam = CAM()
         mock_cam.flush = flush
@@ -47,6 +54,10 @@ class EchoSocket(object):
 
     def settimeout(self, timeout):
         """Set a timeout."""
+        pass
+
+    def close(self):
+        """Close the socket."""
         pass
 
 # TEST
@@ -235,6 +246,21 @@ def test_wait_for_timeout(cam):
     assert response == OrderedDict()
 
 
+def test_wait_for_long_timeout(cam, mock_socket):
+    """Test wait_for when timeout expires."""
+    cmd = 'cmd'
+    value = 'stopscan'
+    timeout = 1
+    mock_socket.recv = MagicMock()
+    mock_socket.recv.return_value = b''
+    time_patch = patch('leicacam.cam.time', side_effect=[0, 0, 120])
+    sleep_patch = patch('leicacam.cam.sleep')
+    with sleep_patch, time_patch:
+        response = cam.wait_for(cmd, value, timeout)
+
+    assert response == OrderedDict()
+
+
 def test_wait_for_any_value(cam):
     """Test wait_for a command and any value."""
     cmd = [('cmd', 'startscan')]
@@ -245,6 +271,13 @@ def test_wait_for_any_value(cam):
     should_be = tuples_as_dict(cmd)
 
     assert response == should_be
+
+
+def test_close(cam, mock_socket):
+    """Test closing the socket."""
+    cam.close()
+
+    assert mock_socket.close.call_count == 1
 
 
 def test_receive_colon_string(cam):
