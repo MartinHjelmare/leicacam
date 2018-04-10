@@ -20,7 +20,7 @@ def logger(function):
     def wrapper(*args, **kwargs):
         """Wrap function."""
         sep = kwargs.get('sep', ' ')
-        end = kwargs.get('end', '\n')
+        end = kwargs.get('end', '')  # do not add newline by default
         out = sep.join([repr(x) for x in args])
         out = out + end
         _LOGGER.debug(out)
