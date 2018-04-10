@@ -2,6 +2,8 @@
 from __future__ import print_function
 
 import os
+import functools
+import logging
 import platform
 import socket
 from collections import OrderedDict
@@ -9,9 +11,27 @@ from time import sleep, time
 
 import pydebug
 
+_LOGGER = logging.getLogger(__name__)
+
+
+def logger(function):
+    """Decorate passed in function and log message to module logger."""
+    @functools.wraps(function)
+    def wrapper(*args, **kwargs):
+        """Wrap function."""
+        sep = kwargs.get('sep', ' ')
+        end = kwargs.get('end', '')  # do not add newline by default
+        out = sep.join([repr(x) for x in args])
+        out = out + end
+        _LOGGER.debug(out)
+        return function(*args, **kwargs)
+    return wrapper
+
+
 # debug with `DEBUG=leicacam python script.py`
 if platform.system() == 'Windows':
     # monkeypatch
+    @logger
     def debug(msg):
         """Debug on Windows."""
         try:
@@ -21,7 +41,7 @@ if platform.system() == 'Windows':
         except KeyError:
             pass
 else:
-    debug = pydebug.debug('leicacam')  # pylint: disable=invalid-name
+    debug = logger(pydebug.debug('leicacam'))  # pylint: disable=invalid-name
 
 
 class CAM(object):
