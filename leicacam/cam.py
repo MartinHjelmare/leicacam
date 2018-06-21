@@ -121,6 +121,8 @@ class CAM(object):
         except socket.error:
             return []
 
+        # remove terminating null byte
+        incomming = incomming.rstrip(b'\x00')
         # split received messages
         # return as list of several messages received
         msgs = incomming.splitlines()
