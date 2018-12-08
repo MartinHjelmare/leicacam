@@ -1,4 +1,4 @@
-.PHONY: help clean clean-build clean-pyc lint test test-all coverage api-docs docs release test-release rst sdist
+.PHONY: help clean clean-build clean-pyc lint test test-all coverage api-docs docs release test-release sdist
 
 help:
 	@echo "clean - run both clean-build and clean-pyc"
@@ -12,7 +12,6 @@ help:
 	@echo "api-docs - generate leicacam rst file for Sphinx HTML documentation"
 	@echo "release - package and upload a release to PyPI"
 	@echo "test-release - package and upload a release to test PyPI"
-	@echo "rst - convert the markdown readme file to rst and add that file"
 	@echo "sdist - package"
 
 clean: clean-build clean-pyc
@@ -47,17 +46,14 @@ docs:
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html
 
-release: clean rst
+release: clean
 	python setup.py sdist bdist_wheel
 	twine upload dist/*
 
-test-release: clean rst
+test-release: clean
 	python setup.py sdist bdist_wheel
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
-rst:
-	if type pandoc; then pandoc --from=markdown --to=rst README.md -o README.rst; fi
-
-sdist: clean rst
+sdist: clean
 	python setup.py sdist bdist_wheel
 	ls -l dist
