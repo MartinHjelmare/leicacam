@@ -13,8 +13,6 @@ import pydebug
 
 _LOGGER = logging.getLogger(__name__)
 
-# pylint: disable=useless-object-inheritance
-
 
 def logger(function):
     """Decorate passed in function and log message to module logger."""

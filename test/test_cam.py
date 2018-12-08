@@ -8,7 +8,6 @@ from mock import MagicMock, patch
 from leicacam.cam import CAM, bytes_as_dict, tuples_as_bytes, tuples_as_dict
 
 # pylint: disable=redefined-outer-name, unnecessary-pass,
-# pylint: disable=useless-object-inheritance
 
 
 def flush():
