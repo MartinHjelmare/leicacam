@@ -30,6 +30,9 @@ setup(
     install_requires=[
         'pydebug'
     ],
+    extras_require={
+        'asyncio':  ['async_timeout'],
+    },
     license='MIT',
     zip_safe=False,
     keywords='leicacam',

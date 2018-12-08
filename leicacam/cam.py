@@ -44,8 +44,8 @@ else:
     debug = logger(pydebug.debug('leicacam'))  # pylint: disable=invalid-name
 
 
-class CAM(object):
-    """Driver for LASAF Computer Assisted Microscopy."""
+class BaseCAM(object):
+    """Base driver for LASAF Computer Assisted Microscopy."""
 
     # pylint: disable=too-many-instance-attributes
 
@@ -59,6 +59,116 @@ class CAM(object):
         self.prefix_bytes = b'/cli:python-leicacam /app:matrix '
         self.buffer_size = 1024
         self.delay = 0.1  # poll every 100ms when waiting for incomming
+
+    def send(self, commands):
+        """Send commands to LASAF through CAM-socket.
+
+        Parameters
+        ----------
+        commands : list of tuples or bytes string
+            Commands as a list of tuples or a bytes string. cam.prefix is
+            allways prepended before sending.
+
+        Returns
+        -------
+        int
+            Bytes sent.
+
+        Example
+        -------
+        ::
+
+            >>> # send list of tuples
+            >>> cam.send([('cmd', 'enableall'), ('value', 'true')])
+
+            >>> # send bytes string
+            >>> cam.send(b'/cmd:enableall /value:true')
+
+        """
+        raise NotImplementedError
+
+    def receive(self):
+        """Receive message from socket interface as list of OrderedDict."""
+        raise NotImplementedError
+
+    def wait_for(self, cmd, value=None, timeout=60):
+        """Hang until command is received.
+
+        If value is supplied, it will hang until ``cmd:value`` is received.
+
+        Parameters
+        ----------
+        cmd : string
+            Command to wait for in bytestring from microscope CAM interface. If
+            ``value`` is falsey, value of received command does not matter.
+        value : string
+            Wait until ``cmd:value`` is received.
+        timeout : int
+            Minutes to wait for command. If timeout is reached, an empty
+            OrderedDict will be returned.
+
+        Returns
+        -------
+        collections.OrderedDict
+            Last received messsage or empty message if timeout is reached.
+
+        """
+        raise NotImplementedError
+
+    def _prepare_send(self, commands):
+        """Prepare message to be sent.
+
+        Parameters
+        ----------
+        commands : list of tuples or bytes string
+            Commands as a list of tuples or a bytes string. cam.prefix is
+            allways prepended before sending.
+
+        Returns
+        -------
+        string
+            Message to be sent.
+
+        """
+        if isinstance(commands, bytes):
+            msg = self.prefix_bytes + commands
+        else:
+            msg = tuples_as_bytes(self.prefix + commands)
+        debug(b'> ' + msg)
+        return msg
+
+
+def _parse_receive(incomming):
+    """Parse received response.
+
+    Parameters
+    ----------
+    incomming : bytes string
+        Incomming bytes from socket server.
+
+    Returns
+    -------
+    list of OrderedDict
+        Received message as a list of OrderedDict.
+
+    """
+    debug(b'< ' + incomming)
+    # remove terminating null byte
+    incomming = incomming.rstrip(b'\x00')
+    # split received messages
+    # return as list of several messages received
+    msgs = incomming.splitlines()
+    return [bytes_as_dict(msg) for msg in msgs]
+
+
+class CAM(BaseCAM):
+    """Driver for LASAF Computer Assisted Microscopy."""
+
+    # pylint: disable=too-many-instance-attributes
+
+    def __init__(self, *args, **kwargs):
+        """Set up instance."""
+        super(CAM, self).__init__(*args, **kwargs)
         self.connect()
 
     def connect(self):
@@ -106,29 +216,55 @@ class CAM(object):
 
         """
         self.flush()  # discard any waiting messages
-        if isinstance(commands, bytes):
-            msg = self.prefix_bytes + commands
-        else:
-            msg = tuples_as_bytes(self.prefix + commands)
-        debug(b'> ' + msg)
+        msg = self._prepare_send(commands)
         return self.socket.send(msg)
 
     def receive(self):
         """Receive message from socket interface as list of OrderedDict."""
         try:
             incomming = self.socket.recv(self.buffer_size)
-            debug(b'< ' + incomming)
         except socket.error:
             return []
 
-        # remove terminating null byte
-        incomming = incomming.rstrip(b'\x00')
-        # split received messages
-        # return as list of several messages received
-        msgs = incomming.splitlines()
-        return [bytes_as_dict(msg) for msg in msgs]
+        return _parse_receive(incomming)
 
-    # convinience functions for commands
+    def wait_for(self, cmd, value=None, timeout=60):
+        """Hang until command is received.
+
+        If value is supplied, it will hang until ``cmd:value`` is received.
+
+        Parameters
+        ----------
+        cmd : string
+            Command to wait for in bytestring from microscope CAM interface. If
+            ``value`` is falsey, value of received command does not matter.
+        value : string
+            Wait until ``cmd:value`` is received.
+        timeout : int
+            Minutes to wait for command. If timeout is reached, an empty
+            OrderedDict will be returned.
+
+        Returns
+        -------
+        collections.OrderedDict
+            Last received messsage or empty message if timeout is reached.
+
+        """
+        wait = time() + timeout * 60
+        while True:
+            if time() > wait:
+                return OrderedDict()
+            msgs = self.receive()
+            msg = check_messages(msgs, cmd, value=value)
+            if msg:
+                return msg
+            sleep(self.delay)
+
+    def close(self):
+        """Close the socket."""
+        self.socket.close()
+
+    # convenience methods for commands
     def start_scan(self):
         """Start the matrix scan."""
         cmd = [('cmd', 'startscan')]
@@ -259,40 +395,6 @@ class CAM(object):
         self.send(cmd)
         return self.wait_for(*cmd[1])
 
-    def wait_for(self, cmd, value=None, timeout=60):
-        """Hang until command is received.
-
-        If value is supplied, it will hang until ``cmd:value`` is received.
-
-        Parameters
-        ----------
-        cmd : string
-            Command to wait for in bytestring from microscope CAM interface. If
-            ``value`` is falsey, value of received command does not matter.
-        value : string
-            Wait until ``cmd:value`` is received.
-        timeout : int
-            Minutues to wait for command. If timeout is reached, an empty
-            OrderedDict will be returned.
-
-        Returns
-        -------
-        collections.OrderedDict
-            Last received messsage or empty message if timeout is reached.
-
-        """
-        wait = time() + timeout * 60
-        while True:
-            if time() > wait:
-                return OrderedDict()
-            msgs = self.receive()
-            for msg in msgs:
-                if value and msg.get(cmd) == value:
-                    return msg
-                elif not value and msg.get(cmd):
-                    return msg
-            sleep(self.delay)
-
 
 ##
 # Helper methods
@@ -384,3 +486,28 @@ def bytes_as_dict(msg):
             key, val = unpacked
         cmds[key] = val
     return cmds
+
+
+def check_messages(msgs, cmd, value=None):
+    """Check if specific message is present.
+
+    Parameters
+    ----------
+    cmd : string
+        Command to check for in bytestring from microscope CAM interface. If
+        ``value`` is falsey, value of received command does not matter.
+    value : string
+        Check if ``cmd:value`` is received.
+
+    Returns
+    -------
+    collections.OrderedDict
+        Correct messsage or None if no correct message if found.
+
+    """
+    for msg in msgs:
+        if value and msg.get(cmd) == value:
+            return msg
+        elif not value and msg.get(cmd):
+            return msg
+    return None

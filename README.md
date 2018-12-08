@@ -10,10 +10,14 @@ Control Leica microscopes with python
 
 ## Installation
 
-Install using `pip`...
+Install using `pip`:
 
 ```bash
 pip install leicacam
+```
+Install version using asyncio. This requires Python 3.5+:
+```bash
+pip3 install leicacam[asyncio]
 ```
 
 ## Example
