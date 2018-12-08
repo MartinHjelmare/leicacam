@@ -4,11 +4,7 @@ import os
 from setuptools import setup
 
 
-os.system('make rst')
-try:
-    README = open('README.rst').read()
-except FileNotFoundError:
-    README = ''
+README = open('README.md').read()
 
 with open(os.path.join('leicacam', 'VERSION')) as version_file:
     VERSION = version_file.read().strip()
@@ -18,6 +14,7 @@ setup(
     version=VERSION,
     description='Control Leica microscopes with python',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Arve Seljebu',
     author_email='arve.seljebu@gmail.com',
     url='https://github.com/arve0/leicacam',
