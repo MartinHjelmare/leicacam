@@ -36,7 +36,7 @@ if platform.system() == 'Windows':
         """Debug on Windows."""
         try:
             dbg = os.environ['DEBUG']
-            if dbg == 'leicacam' or dbg == '*':
+            if dbg in ('leicacam', '*'):
                 print('leicacam ' + str(msg))
         except KeyError:
             pass
@@ -508,6 +508,6 @@ def check_messages(msgs, cmd, value=None):
     for msg in msgs:
         if value and msg.get(cmd) == value:
             return msg
-        elif not value and msg.get(cmd):
+        if not value and msg.get(cmd):
             return msg
     return None
