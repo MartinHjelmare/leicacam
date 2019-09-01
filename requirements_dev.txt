@@ -2,6 +2,6 @@
 -r requirements_pypi.txt
 -r requirements_test.txt
 -r docs/requirements.txt
-tox==3.5.3
+tox==3.13.2
 
 -e .
