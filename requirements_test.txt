@@ -1,6 +1,6 @@
 asynctest==0.13.0
 flake8==3.7.8
-mock==2.0.0
+mock==3.0.5
 pydocstyle==3.0.0
 pylint==1.9.3
 pytest==4.0.1
