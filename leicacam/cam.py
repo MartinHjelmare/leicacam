@@ -42,7 +42,7 @@ else:
     debug = logger(pydebug.debug('leicacam'))  # pylint: disable=invalid-name
 
 
-class BaseCAM(object):
+class BaseCAM:
     """Base driver for LASAF Computer Assisted Microscopy."""
 
     # pylint: disable=too-many-instance-attributes

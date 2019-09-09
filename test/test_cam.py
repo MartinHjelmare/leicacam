@@ -34,7 +34,7 @@ def cam(mock_socket):
         yield mock_cam
 
 
-class EchoSocket(object):
+class EchoSocket:
     """Dummy echo socket for mocking."""
 
     msg = ''
