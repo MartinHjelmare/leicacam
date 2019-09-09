@@ -1,9 +1,9 @@
 """Tests for cam module."""
 import socket
 from collections import OrderedDict
+from unittest.mock import MagicMock, patch
 
 import pytest
-from mock import MagicMock, patch
 
 from leicacam.cam import CAM, bytes_as_dict, tuples_as_bytes, tuples_as_dict
 
