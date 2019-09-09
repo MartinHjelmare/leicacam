@@ -24,12 +24,11 @@ setup(
     package_dir={'leicacam': 'leicacam'},
     package_data={'leicacam': ['VERSION']},
     include_package_data=True,
+    python_requires='>=3.5',
     install_requires=[
-        'pydebug'
+        'async_timeout',
+        'pydebug',
     ],
-    extras_require={
-        'asyncio':  ['async_timeout'],
-    },
     license='MIT',
     zip_safe=False,
     keywords='leicacam',
@@ -38,11 +37,9 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )

@@ -1,6 +1,4 @@
 """Provide an interface to the CAM server."""
-from __future__ import print_function
-
 import os
 import functools
 import logging
