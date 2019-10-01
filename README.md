@@ -3,6 +3,7 @@
 [![build-status-image]][travis]
 [![pypi-version]][pypi]
 [![wheel]][pypi]
+[![Documentation Status][docs-build-badge]][docs]
 
 ## Overview
 
@@ -73,3 +74,5 @@ make docs
 [pypi-version]: https://img.shields.io/pypi/v/leicacam.svg
 [pypi]: https://pypi.org/project/leicacam/
 [wheel]: https://img.shields.io/pypi/wheel/leicacam.svg
+[docs-build-badge]: https://readthedocs.org/projects/leicacam/badge/?version=latest
+[docs]: https://leicacam.readthedocs.io/en/latest/?badge=latest
