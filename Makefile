@@ -9,6 +9,7 @@ help:
 	@echo "test-all - run tests on every Python version with tox"
 	@echo "coverage - check code coverage quickly with the default Python"
 	@echo "docs - generate Sphinx HTML documentation, including API docs"
+	@echo "docs-live - rebuild the documentation when a change is detected"
 	@echo "api-docs - generate leicacam rst file for Sphinx HTML documentation"
 	@echo "release - package and upload a release to PyPI"
 	@echo "test-release - package and upload a release to test PyPI"
@@ -44,7 +45,10 @@ api-docs:
 docs:
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
-	open docs/_build/html/index.html
+
+docs-live:
+	$(MAKE) -C docs clean
+	$(MAKE) -C docs livehtml
 
 release: clean
 	python setup.py sdist bdist_wheel
