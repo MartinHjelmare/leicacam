@@ -151,11 +151,14 @@ def _parse_receive(incomming):
 
     """
     debug(b'< ' + incomming)
-    # remove terminating null byte
-    incomming = incomming.rstrip(b'\x00')
-    # split received messages
+    # first split on terminating null byte
+    incomming = incomming.split(b'\x00')
+    msgs = []
+    for msg in incomming:
+        # then split on line ending
+        split_msg = msg.splitlines()
+        msgs.extend(split_msg)
     # return as list of several messages received
-    msgs = incomming.splitlines()
     return [bytes_as_dict(msg) for msg in msgs]
 
 
