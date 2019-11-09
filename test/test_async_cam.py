@@ -13,7 +13,7 @@ pytestmark = pytest.mark.asyncio  # pylint: disable=invalid-name
 class MockEchoConnection:
     """Mock an echo connection."""
 
-    msg = b''
+    msg = b""
 
     def write(self, msg):
         """Write a message."""
@@ -61,8 +61,8 @@ def open_connection_ret(mock_reader, mock_writer):
 def mock_open_connection(open_connection_ret):
     """Mock asyncio open_connection."""
     open_connection_patch = patch(
-        'leicacam.async_cam.asyncio.open_connection',
-        return_value=open_connection_ret)
+        "leicacam.async_cam.asyncio.open_connection", return_value=open_connection_ret
+    )
     with open_connection_patch as mock_open:
         yield mock_open
 
@@ -78,8 +78,13 @@ def async_cam(event_loop, mock_open_connection):
 
 async def test_echo(async_cam):
     """Prefix + command sent should be same as echoed socket message."""
-    cmd = [('cli', 'custom'), ('cmd', 'enableall'), ('value', 'true'),
-           ('integer', 1234), ('float', 0.00234)]
+    cmd = [
+        ("cli", "custom"),
+        ("cmd", "enableall"),
+        ("value", "true"),
+        ("integer", 5678),
+        ("float", 0.00567),
+    ]
 
     await async_cam.send(cmd)
     [response] = await async_cam.receive()
@@ -91,7 +96,7 @@ async def test_echo(async_cam):
 
 async def test_send_bytes(async_cam):
     """Test send a bytes string."""
-    cmd = b'/cmd:enableall /value:true'
+    cmd = b"/cmd:enableall /value:true"
     await async_cam.send(cmd)
     [response] = await async_cam.receive()
 

@@ -14,32 +14,36 @@ _LOGGER = logging.getLogger(__name__)
 
 def logger(function):
     """Decorate passed in function and log message to module logger."""
+
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
         """Wrap function."""
-        sep = kwargs.get('sep', ' ')
-        end = kwargs.get('end', '')  # do not add newline by default
+        sep = kwargs.get("sep", " ")
+        end = kwargs.get("end", "")  # do not add newline by default
         out = sep.join([repr(x) for x in args])
         out = out + end
         _LOGGER.debug(out)
         return function(*args, **kwargs)
+
     return wrapper
 
 
 # debug with `DEBUG=leicacam python script.py`
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     # monkeypatch
     @logger
     def debug(msg):
         """Debug on Windows."""
         try:
-            dbg = os.environ['DEBUG']
-            if dbg in ('leicacam', '*'):
-                print('leicacam ' + str(msg))
+            dbg = os.environ["DEBUG"]
+            if dbg in ("leicacam", "*"):
+                print("leicacam " + str(msg))
         except KeyError:
             pass
+
+
 else:
-    debug = logger(pydebug.debug('leicacam'))  # pylint: disable=invalid-name
+    debug = logger(pydebug.debug("leicacam"))  # pylint: disable=invalid-name
 
 
 class BaseCAM:
@@ -47,14 +51,13 @@ class BaseCAM:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, host='127.0.0.1', port=8895):
+    def __init__(self, host="127.0.0.1", port=8895):
         """Set up instance."""
         self.host = host
         self.port = port
         # prefix for all commands
-        self.prefix = [('cli', 'python-leicacam'),
-                       ('app', 'matrix')]
-        self.prefix_bytes = b'/cli:python-leicacam /app:matrix '
+        self.prefix = [("cli", "python-leicacam"), ("app", "matrix")]
+        self.prefix_bytes = b"/cli:python-leicacam /app:matrix "
         self.buffer_size = 1024
         self.delay = 0.1  # poll every 100ms when waiting for incomming
 
@@ -132,7 +135,7 @@ class BaseCAM:
             msg = self.prefix_bytes + commands
         else:
             msg = tuples_as_bytes(self.prefix + commands)
-        debug(b'> ' + msg)
+        debug(b"> " + msg)
         return msg
 
 
@@ -150,9 +153,9 @@ def _parse_receive(incomming):
         Received message as a list of OrderedDict.
 
     """
-    debug(b'< ' + incomming)
+    debug(b"< " + incomming)
     # first split on terminating null byte
-    incomming = incomming.split(b'\x00')
+    incomming = incomming.split(b"\x00")
     msgs = []
     for msg in incomming:
         # then split on line ending
@@ -178,16 +181,15 @@ class CAM(BaseCAM):
         self.socket.connect((self.host, self.port))
         self.socket.settimeout(False)  # non-blocking
         sleep(self.delay)  # wait for response
-        self.welcome_msg = self.socket.recv(
-            self.buffer_size)  # receive welcome message
+        self.welcome_msg = self.socket.recv(self.buffer_size)  # receive welcome message
 
     def flush(self):
         """Flush incomming socket messages."""
-        debug('flushing incomming socket messages')
+        debug("flushing incomming socket messages")
         try:
             while True:
                 msg = self.socket.recv(self.buffer_size)
-                debug(b'< ' + msg)
+                debug(b"< " + msg)
         except socket.error:
             pass
 
@@ -268,25 +270,25 @@ class CAM(BaseCAM):
     # convenience methods for commands
     def start_scan(self):
         """Start the matrix scan."""
-        cmd = [('cmd', 'startscan')]
+        cmd = [("cmd", "startscan")]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def stop_scan(self):
         """Stop the matrix scan."""
-        cmd = [('cmd', 'stopscan')]
+        cmd = [("cmd", "stopscan")]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def autofocus_scan(self):
         """Start the autofocus job."""
-        cmd = [('cmd', 'autofocusscan')]
+        cmd = [("cmd", "autofocusscan")]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def pause_scan(self):
         """Pause the matrix scan."""
-        cmd = [('cmd', 'pausescan')]
+        cmd = [("cmd", "pausescan")]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
@@ -294,13 +296,13 @@ class CAM(BaseCAM):
         """Enable a given scan field."""
         # pylint: disable=too-many-arguments
         cmd = [
-            ('cmd', 'enable'),
-            ('slide', str(slide)),
-            ('wellx', str(wellx)),
-            ('welly', str(welly)),
-            ('fieldx', str(fieldx)),
-            ('fieldy', str(fieldy)),
-            ('value', 'true')
+            ("cmd", "enable"),
+            ("slide", str(slide)),
+            ("wellx", str(wellx)),
+            ("welly", str(welly)),
+            ("fieldx", str(fieldx)),
+            ("fieldy", str(fieldy)),
+            ("value", "true"),
         ]
         self.send(cmd)
         return self.wait_for(*cmd[0])
@@ -309,36 +311,32 @@ class CAM(BaseCAM):
         """Disable a given scan field."""
         # pylint: disable=too-many-arguments
         cmd = [
-            ('cmd', 'enable'),
-            ('slide', str(slide)),
-            ('wellx', str(wellx)),
-            ('welly', str(welly)),
-            ('fieldx', str(fieldx)),
-            ('fieldy', str(fieldy)),
-            ('value', 'false')
+            ("cmd", "enable"),
+            ("slide", str(slide)),
+            ("wellx", str(wellx)),
+            ("welly", str(welly)),
+            ("fieldx", str(fieldx)),
+            ("fieldy", str(fieldy)),
+            ("value", "false"),
         ]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def enable_all(self):
         """Enable all scan fields."""
-        cmd = [('cmd', 'enableall'), ('value', 'true')]
+        cmd = [("cmd", "enableall"), ("value", "true")]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def disable_all(self):
         """Disable all scan fields."""
-        cmd = [('cmd', 'enableall'), ('value', 'false')]
+        cmd = [("cmd", "enableall"), ("value", "false")]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
     def save_template(self, filename="{ScanningTemplate}leicacam.xml"):
         """Save scanning template to filename."""
-        cmd = [
-            ('sys', '0'),
-            ('cmd', 'save'),
-            ('fil', str(filename))
-        ]
+        cmd = [("sys", "0"), ("cmd", "save"), ("fil", str(filename))]
         self.send(cmd)
         return self.wait_for(*cmd[0])
 
@@ -375,24 +373,17 @@ class CAM(BaseCAM):
 
         """
         basename = os.path.basename(filename)
-        if basename[-4:] == '.xml':
+        if basename[-4:] == ".xml":
             basename = basename[:-4]
-        if basename[:18] != '{ScanningTemplate}':
-            basename = '{ScanningTemplate}' + basename
-        cmd = [
-            ('sys', '0'),
-            ('cmd', 'load'),
-            ('fil', str(basename))
-        ]
+        if basename[:18] != "{ScanningTemplate}":
+            basename = "{ScanningTemplate}" + basename
+        cmd = [("sys", "0"), ("cmd", "load"), ("fil", str(basename))]
         self.send(cmd)
         return self.wait_for(*cmd[1])
 
-    def get_information(self, about='stage'):
+    def get_information(self, about="stage"):
         """Get information about given keyword. Defaults to stage."""
-        cmd = [
-            ('cmd', 'getinfo'),
-            ('dev', str(about))
-        ]
+        cmd = [("cmd", "getinfo"), ("dev", str(about))]
         self.send(cmd)
         return self.wait_for(*cmd[1])
 
@@ -400,6 +391,7 @@ class CAM(BaseCAM):
 ##
 # Helper methods
 ##
+
 
 def tuples_as_bytes(cmds):
     """Format list of tuples to CAM message with format /key:val.
@@ -427,8 +419,8 @@ def tuples_as_bytes(cmds):
     for key, val in cmds.items():
         key = str(key)
         val = str(val)
-        tmp.append('/' + key + ':' + val)
-    return ' '.join(tmp).encode()
+        tmp.append("/" + key + ":" + val)
+    return " ".join(tmp).encode()
 
 
 def tuples_as_dict(_list):
@@ -473,14 +465,14 @@ def bytes_as_dict(msg):
 
     """
     # decode bytes, assume '/' in start
-    cmd_strings = msg.decode()[1:].split(r' /')
+    cmd_strings = msg.decode()[1:].split(r" /")
     cmds = OrderedDict()
     for cmd in cmd_strings:
-        unpacked = cmd.split(':')
+        unpacked = cmd.split(":")
         # handle string not well formated (ex filenames with c:\)
         if len(unpacked) > 2:
             key = unpacked[0]
-            val = ':'.join(unpacked[1:])
+            val = ":".join(unpacked[1:])
         elif len(unpacked) < 2:
             continue
         else:

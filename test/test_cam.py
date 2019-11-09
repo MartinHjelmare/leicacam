@@ -26,7 +26,7 @@ def mock_socket():
 @pytest.fixture
 def cam(mock_socket):
     """Yield a CAM instance with a mock socket."""
-    with patch('socket.socket') as mock_socket_class:
+    with patch("socket.socket") as mock_socket_class:
         mock_socket_class.return_value = mock_socket
         mock_cam = CAM()
         mock_cam.flush = flush
@@ -37,7 +37,7 @@ def cam(mock_socket):
 class EchoSocket:
     """Dummy echo socket for mocking."""
 
-    msg = ''
+    msg = ""
 
     def send(self, msg):
         """Send a message."""
@@ -60,6 +60,7 @@ class EchoSocket:
         """Close the socket."""
         pass
 
+
 # TEST
 # key (here cli) overrided if defined several times
 # prefix added
@@ -68,8 +69,13 @@ class EchoSocket:
 
 def test_echo(cam):
     """Prefix + command sent should be same as echoed socket message."""
-    cmd = [('cli', 'custom'), ('cmd', 'enableall'), ('value', 'true'),
-           ('integer', 1234), ('float', 0.00234)]
+    cmd = [
+        ("cli", "custom"),
+        ("cmd", "enableall"),
+        ("value", "true"),
+        ("integer", 1234),
+        ("float", 0.00234),
+    ]
 
     cam.send(cmd)
     response = cam.receive()[0]
@@ -81,7 +87,7 @@ def test_echo(cam):
 
 def test_send_bytes(cam):
     """Test send a bytes string."""
-    cmd = b'/cmd:enableall /value:true'
+    cmd = b"/cmd:enableall /value:true"
     cam.send(cmd)
     response = cam.receive()[0]
 
@@ -92,10 +98,10 @@ def test_send_bytes(cam):
 
 def test_flush():
     """Test flush method."""
-    cmd = b'/cmd:startscan\n'
+    cmd = b"/cmd:startscan\n"
     mock_recv = MagicMock()
     mock_recv.side_effect = [cmd, socket.error()]
-    with patch('socket.socket') as mock_socket_class:
+    with patch("socket.socket") as mock_socket_class:
         mock_socket = MagicMock()
         mock_socket_class.return_value = mock_socket
         cam = CAM()
@@ -105,7 +111,7 @@ def test_flush():
 
     assert len(mock_recv.mock_calls) == 2
     _, args, _ = mock_recv.mock_calls[0]
-    assert args == (1024, )
+    assert args == (1024,)
 
 
 def test_receive_error(cam):
@@ -121,7 +127,7 @@ def test_receive_error(cam):
 def test_commands(cam):
     """Short hand commands should work as intended."""
     # get_information
-    cmd = cam.prefix + [('cmd', 'getinfo'), ('dev', 'stage')]
+    cmd = cam.prefix + [("cmd", "getinfo"), ("dev", "stage")]
 
     information = cam.get_information()
     should_be = tuples_as_dict(cmd)
@@ -129,7 +135,7 @@ def test_commands(cam):
     assert information == should_be
 
     # start_scan
-    cmd = cam.prefix + [('cmd', 'startscan')]
+    cmd = cam.prefix + [("cmd", "startscan")]
 
     response = cam.start_scan()
     should_be = tuples_as_dict(cmd)
@@ -137,7 +143,7 @@ def test_commands(cam):
     assert response == should_be
 
     # stop_scan
-    cmd = cam.prefix + [('cmd', 'stopscan')]
+    cmd = cam.prefix + [("cmd", "stopscan")]
 
     response = cam.stop_scan()
     should_be = tuples_as_dict(cmd)
@@ -145,7 +151,7 @@ def test_commands(cam):
     assert response == should_be
 
     # autofocus_scan
-    cmd = cam.prefix + [('cmd', 'autofocusscan')]
+    cmd = cam.prefix + [("cmd", "autofocusscan")]
 
     response = cam.autofocus_scan()
     should_be = tuples_as_dict(cmd)
@@ -153,7 +159,7 @@ def test_commands(cam):
     assert response == should_be
 
     # pause_scan
-    cmd = cam.prefix + [('cmd', 'pausescan')]
+    cmd = cam.prefix + [("cmd", "pausescan")]
 
     response = cam.pause_scan()
     should_be = tuples_as_dict(cmd)
@@ -162,13 +168,13 @@ def test_commands(cam):
 
     # enable
     cmd = [
-        ('cmd', 'enable'),
-        ('slide', str(0)),
-        ('wellx', str(1)),
-        ('welly', str(1)),
-        ('fieldx', str(1)),
-        ('fieldy', str(1)),
-        ('value', 'true')
+        ("cmd", "enable"),
+        ("slide", str(0)),
+        ("wellx", str(1)),
+        ("welly", str(1)),
+        ("fieldx", str(1)),
+        ("fieldy", str(1)),
+        ("value", "true"),
     ]
     cmd = cam.prefix + cmd
 
@@ -179,13 +185,13 @@ def test_commands(cam):
 
     # disable
     cmd = [
-        ('cmd', 'enable'),
-        ('slide', str(0)),
-        ('wellx', str(1)),
-        ('welly', str(1)),
-        ('fieldx', str(1)),
-        ('fieldy', str(1)),
-        ('value', 'false')
+        ("cmd", "enable"),
+        ("slide", str(0)),
+        ("wellx", str(1)),
+        ("welly", str(1)),
+        ("fieldx", str(1)),
+        ("fieldy", str(1)),
+        ("value", "false"),
     ]
     cmd = cam.prefix + cmd
 
@@ -195,7 +201,7 @@ def test_commands(cam):
     assert response == should_be
 
     # enable_all
-    cmd = [('cmd', 'enableall'), ('value', 'true')]
+    cmd = [("cmd", "enableall"), ("value", "true")]
     cmd = cam.prefix + cmd
 
     response = cam.enable_all()
@@ -204,7 +210,7 @@ def test_commands(cam):
     assert response == should_be
 
     # disable_all
-    cmd = [('cmd', 'enableall'), ('value', 'false')]
+    cmd = [("cmd", "enableall"), ("value", "false")]
     cmd = cam.prefix + cmd
 
     response = cam.disable_all()
@@ -214,8 +220,9 @@ def test_commands(cam):
 
     # save_template
     cmd = [
-        ('sys', '0'), ('cmd', 'save'),
-        ('fil', '{ScanningTemplate}leicacam.xml'),
+        ("sys", "0"),
+        ("cmd", "save"),
+        ("fil", "{ScanningTemplate}leicacam.xml"),
     ]
     cmd = cam.prefix + cmd
 
@@ -227,20 +234,20 @@ def test_commands(cam):
 
 def test_load(cam):
     """load_template should strip path and .xml from filename."""
-    response = cam.load_template('test')
-    assert response['fil'] == '{ScanningTemplate}test'
+    response = cam.load_template("test")
+    assert response["fil"] == "{ScanningTemplate}test"
 
-    response = cam.load_template('test.xml')
-    assert response['fil'] == '{ScanningTemplate}test'
+    response = cam.load_template("test.xml")
+    assert response["fil"] == "{ScanningTemplate}test"
 
-    response = cam.load_template('/path/to/{ScanningTemplate}test.xml')
-    assert response['fil'] == '{ScanningTemplate}test'
+    response = cam.load_template("/path/to/{ScanningTemplate}test.xml")
+    assert response["fil"] == "{ScanningTemplate}test"
 
 
 def test_wait_for_timeout(cam):
     """Test wait_for when timeout expires."""
-    cmd = 'cmd'
-    value = 'stopscan'
+    cmd = "cmd"
+    value = "stopscan"
     response = cam.wait_for(cmd, value, 0)
 
     assert response == OrderedDict()
@@ -248,13 +255,13 @@ def test_wait_for_timeout(cam):
 
 def test_wait_for_long_timeout(cam, mock_socket):
     """Test wait_for when timeout expires."""
-    cmd = 'cmd'
-    value = 'stopscan'
+    cmd = "cmd"
+    value = "stopscan"
     timeout = 1
     mock_socket.recv = MagicMock()
-    mock_socket.recv.return_value = b''
-    time_patch = patch('leicacam.cam.time', side_effect=[0, 0, 120])
-    sleep_patch = patch('leicacam.cam.sleep')
+    mock_socket.recv.return_value = b""
+    time_patch = patch("leicacam.cam.time", side_effect=[0, 0, 120])
+    sleep_patch = patch("leicacam.cam.sleep")
     with sleep_patch, time_patch:
         response = cam.wait_for(cmd, value, timeout)
 
@@ -263,9 +270,9 @@ def test_wait_for_long_timeout(cam, mock_socket):
 
 def test_wait_for_any_value(cam):
     """Test wait_for a command and any value."""
-    cmd = [('cmd', 'startscan')]
+    cmd = [("cmd", "startscan")]
     cam.send(cmd)
-    response = cam.wait_for('cmd', None)
+    response = cam.wait_for("cmd", None)
 
     cmd = cam.prefix + cmd
     should_be = tuples_as_dict(cmd)
@@ -282,7 +289,7 @@ def test_close(cam, mock_socket):
 
 def test_receive_colon_string(cam):
     """Test bytes_as_dict function receiving a string with colon."""
-    cmd = [('relpath', 'C:\\image.ome.tif')]
+    cmd = [("relpath", "C:\\image.ome.tif")]
     cam.socket.recv = MagicMock()
     cam.socket.recv.return_value = tuples_as_bytes(cmd)
     response = cam.receive()
@@ -294,8 +301,8 @@ def test_receive_colon_string(cam):
 
 def test_receive_bad_string(cam):
     """Test bytes_as_dict function receiving an incomplete command."""
-    cmd = [('cmd', 'enableall')]
-    cmd_string = '/cmd:enableall /value'
+    cmd = [("cmd", "enableall")]
+    cmd_string = "/cmd:enableall /value"
     cam.socket.recv = MagicMock()
     cam.socket.recv.return_value = cmd_string.encode()
     response = cam.receive()
@@ -307,10 +314,10 @@ def test_receive_bad_string(cam):
 
 def test_receive_terminate_null_byte(cam):
     """Test _parse_receive function parsing a message with null byte."""
-    start_cmd = [('cmd', 'startscan')]
-    stop_cmd = [('cmd', 'stopscan')]
+    start_cmd = [("cmd", "startscan")]
+    stop_cmd = [("cmd", "stopscan")]
     all_cmds = [OrderedDict(start_cmd), OrderedDict(stop_cmd)]
-    cmd_byte = b'/cmd:startscan\x00/cmd:stopscan\r\n'
+    cmd_byte = b"/cmd:startscan\x00/cmd:stopscan\r\n"
     cam.socket.recv = MagicMock()
     cam.socket.recv.return_value = cmd_byte
     response = cam.receive()

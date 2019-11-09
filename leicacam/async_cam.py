@@ -21,7 +21,8 @@ class AsyncCAM(BaseCAM):
     async def connect(self):
         """Connect to LASAF through a CAM-socket."""
         self.reader, self.writer = await asyncio.open_connection(
-            self.host, self.port, loop=self.loop)
+            self.host, self.port, loop=self.loop
+        )
         self.welcome_msg = await self.reader.read(self.buffer_size)
 
     async def send(self, commands):
