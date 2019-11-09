@@ -303,3 +303,17 @@ def test_receive_bad_string(cam):
     assert isinstance(response, list)
     for msg in response:
         assert msg == OrderedDict(cmd)
+
+
+def test_receive_terminate_null_byte(cam):
+    """Test _parse_receive function parsing a message with null byte."""
+    start_cmd = [('cmd', 'startscan')]
+    stop_cmd = [('cmd', 'stopscan')]
+    all_cmds = [OrderedDict(start_cmd), OrderedDict(stop_cmd)]
+    cmd_byte = b'/cmd:startscan\x00/cmd:stopscan\r\n'
+    cam.socket.recv = MagicMock()
+    cam.socket.recv.return_value = cmd_byte
+    response = cam.receive()
+
+    assert isinstance(response, list)
+    assert response == all_cmds
