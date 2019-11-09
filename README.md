@@ -55,6 +55,13 @@ Install dependencies and link development version of leicacam to pip:
 pip install -r requirements_dev.txt
 ```
 
+### Code formatting
+We use black code formatter to automatically format the code.
+This requires Python 3.6 for development.
+```bash
+black ./
+```
+
 ### Testing
 ```bash
 tox
