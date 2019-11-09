@@ -82,8 +82,8 @@ async def test_echo(async_cam):
         ("cli", "custom"),
         ("cmd", "enableall"),
         ("value", "true"),
-        ("integer", 1234),
-        ("float", 0.00234),
+        ("integer", 5678),
+        ("float", 0.00567),
     ]
 
     await async_cam.send(cmd)
