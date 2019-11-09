@@ -1,0 +1,8 @@
+[MASTER]
+reports=no
+
+# Black needs to disable wrong-hanging-indent.
+
+disable=
+  bad-continuation,
+  locally-disabled,

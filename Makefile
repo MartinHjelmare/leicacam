@@ -1,6 +1,8 @@
 .PHONY: help clean clean-build clean-pyc lint test test-all coverage api-docs docs release test-release sdist
 
 help:
+	@echo "black - run black code formatter check"
+	@echo "black-format - run black code formatter format"
 	@echo "clean - run both clean-build and clean-pyc"
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
@@ -14,6 +16,12 @@ help:
 	@echo "release - package and upload a release to PyPI"
 	@echo "test-release - package and upload a release to test PyPI"
 	@echo "sdist - package"
+
+black:
+	black --check ./
+
+black-format:
+	black ./
 
 clean: clean-build clean-pyc
 
