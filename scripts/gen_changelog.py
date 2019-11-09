@@ -32,8 +32,8 @@ def generate():
         return
     print('Generating changelog for version {}'.format(version))
     options = [
-        '--user', 'arve0', '--project', 'leicacam', '-v', '--with-unreleased',
-        '--future-release', version]
+        '--user', 'MartinHjelmare', '--project', 'leicacam', '-v',
+        '--with-unreleased', '--future-release', version]
     generator = ChangelogGenerator(options)
     generator.run()
     os.chdir(old_dir)
