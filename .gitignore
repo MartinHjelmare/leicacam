@@ -111,3 +111,9 @@ output/*/index.html
 
 # mypy
 .mypy_cache/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/cSpell.json
+!.vscode/extensions.json
+!.vscode/tasks.json
