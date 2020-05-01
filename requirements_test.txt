@@ -1,7 +1,7 @@
 asynctest==0.13.0
 flake8==3.7.9
 pydocstyle==5.0.2
-pylint==2.4.4
+pylint==2.5.0
 pytest==5.4.1
-pytest-asyncio==0.10.0
+pytest-asyncio==0.11.0
 pytest-cov==2.8.1
