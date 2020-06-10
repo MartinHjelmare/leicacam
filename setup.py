@@ -1,29 +1,29 @@
 #!/usr/bin/env python
 """Set up package."""
-import os
-from setuptools import setup
+from pathlib import Path
 
+from setuptools import find_packages, setup
 
-README = open("README.md").read()
+PROJECT_DIR = Path(__file__).parent.resolve()
+VERSION = (PROJECT_DIR / "leicacam" / "VERSION").read_text().strip()
 
-with open(os.path.join("leicacam", "VERSION")) as version_file:
-    VERSION = version_file.read().strip()
+README_FILE = PROJECT_DIR / "README.md"
+LONG_DESCRIPTION = README_FILE.read_text(encoding="utf-8")
+
 
 setup(
     name="leicacam",
     version=VERSION,
     description="Control Leica microscopes with python",
-    long_description=README,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     author="Arve Seljebu",
     author_email="arve.seljebu@gmail.com",
-    url="https://github.com/arve0/leicacam",
-    packages=["leicacam",],
-    package_dir={"leicacam": "leicacam"},
-    package_data={"leicacam": ["VERSION"]},
+    url="https://github.com/MartinHjelmare/leicacam",
+    packages=find_packages(exclude=["test", "test.*"]),
     include_package_data=True,
     python_requires=">=3.5",
-    install_requires=["async_timeout", "pydebug",],
+    install_requires=["async_timeout", "pydebug"],
     license="MIT",
     zip_safe=False,
     keywords="leicacam",
