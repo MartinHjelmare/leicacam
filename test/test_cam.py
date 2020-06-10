@@ -62,7 +62,7 @@ class EchoSocket:
 
 
 # TEST
-# key (here cli) overrided if defined several times
+# key (here cli) overridden if defined several times
 # prefix added
 # types (integer, float) should be converted to strings
 

@@ -57,11 +57,11 @@ class AsyncCAM(BaseCAM):
     async def receive(self):
         """Receive message from socket interface as list of OrderedDict."""
         try:
-            incomming = await self.reader.read(self.buffer_size)
+            incoming = await self.reader.read(self.buffer_size)
         except OSError:
             return []
 
-        return _parse_receive(incomming)
+        return _parse_receive(incoming)
 
     async def wait_for(self, cmd, value=None, timeout=60):
         """Hang until command is received.
@@ -72,7 +72,7 @@ class AsyncCAM(BaseCAM):
         ----------
         cmd : string
             Command to wait for in bytestring from microscope CAM interface. If
-            ``value`` is falsey, value of received command does not matter.
+            ``value`` is falsy, value of received command does not matter.
         value : string
             Wait until ``cmd:value`` is received.
         timeout : int
