@@ -49,7 +49,7 @@ else:
 class BaseCAM:
     """Base driver for LASAF Computer Assisted Microscopy."""
 
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes, too-few-public-methods
 
     def __init__(self, host="127.0.0.1", port=8895):
         """Set up instance."""
@@ -60,61 +60,6 @@ class BaseCAM:
         self.prefix_bytes = b"/cli:python-leicacam /app:matrix "
         self.buffer_size = 1024
         self.delay = 0.1  # poll every 100ms when waiting for incoming
-
-    def send(self, commands):
-        """Send commands to LASAF through CAM-socket.
-
-        Parameters
-        ----------
-        commands : list of tuples or bytes string
-            Commands as a list of tuples or a bytes string. cam.prefix is
-            allways prepended before sending.
-
-        Returns
-        -------
-        int
-            Bytes sent.
-
-        Example
-        -------
-        ::
-
-            >>> # send list of tuples
-            >>> cam.send([('cmd', 'enableall'), ('value', 'true')])
-
-            >>> # send bytes string
-            >>> cam.send(b'/cmd:enableall /value:true')
-
-        """
-        raise NotImplementedError
-
-    def receive(self):
-        """Receive message from socket interface as list of OrderedDict."""
-        raise NotImplementedError
-
-    def wait_for(self, cmd, value=None, timeout=60):
-        """Hang until command is received.
-
-        If value is supplied, it will hang until ``cmd:value`` is received.
-
-        Parameters
-        ----------
-        cmd : string
-            Command to wait for in bytestring from microscope CAM interface. If
-            ``value`` is falsy, value of received command does not matter.
-        value : string
-            Wait until ``cmd:value`` is received.
-        timeout : int
-            Minutes to wait for command. If timeout is reached, an empty
-            OrderedDict will be returned.
-
-        Returns
-        -------
-        collections.OrderedDict
-            Last received messsage or empty message if timeout is reached.
-
-        """
-        raise NotImplementedError
 
     def _prepare_send(self, commands):
         """Prepare message to be sent.
