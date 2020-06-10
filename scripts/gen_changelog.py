@@ -7,7 +7,7 @@ from pygcgen.main import ChangelogGenerator
 
 def validate_version():
     """Validate version before release."""
-    import leicacam
+    import leicacam  # pylint: disable=import-outside-toplevel
 
     version_string = leicacam.__version__
     versions = version_string.split(".", 3)
