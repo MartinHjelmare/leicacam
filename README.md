@@ -1,6 +1,6 @@
 # leicacam
 
-[![build-status-image]][travis]
+[![build-badge]][build]
 [![pypi-version]][pypi]
 [![wheel]][pypi]
 [![Documentation Status][docs-build-badge]][docs]
@@ -74,10 +74,8 @@ pip install -r docs/requirements.txt
 make docs
 ```
 
-
-
-[build-status-image]: https://travis-ci.org/MartinHjelmare/leicacam.svg?branch=master
-[travis]: https://travis-ci.org/MartinHjelmare/leicacam
+[build-badge]: https://github.com/MartinHjelmare/leicacam/workflows/Test/badge.svg
+[build]: https://github.com/MartinHjelmare/leicacam/actions
 [pypi-version]: https://img.shields.io/pypi/v/leicacam.svg
 [pypi]: https://pypi.org/project/leicacam/
 [wheel]: https://img.shields.io/pypi/wheel/leicacam.svg
