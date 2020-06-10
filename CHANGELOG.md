@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.2](https://github.com/MartinHjelmare/leicacam/tree/0.4.2) (2020-06-10)
+
+[Full Changelog](https://github.com/MartinHjelmare/leicacam/compare/0.4.1...0.4.2)
+
+**Merged pull requests:**
+
+- Delint commands markdown [\#48](https://github.com/MartinHjelmare/leicacam/pull/48) ([MartinHjelmare](https://github.com/MartinHjelmare))
+- Remove stale changelog script [\#47](https://github.com/MartinHjelmare/leicacam/pull/47) ([MartinHjelmare](https://github.com/MartinHjelmare))
+- Fix release action [\#46](https://github.com/MartinHjelmare/leicacam/pull/46) ([MartinHjelmare](https://github.com/MartinHjelmare))
+- Update changelog [\#45](https://github.com/MartinHjelmare/leicacam/pull/45) ([github-actions[bot]](https://github.com/apps/github-actions))
+
 ## [0.4.1](https://github.com/MartinHjelmare/leicacam/tree/0.4.1) (2020-06-10)
 
 [Full Changelog](https://github.com/MartinHjelmare/leicacam/compare/0.4.0...0.4.1)
