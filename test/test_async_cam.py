@@ -32,7 +32,7 @@ def mock_connection():
 
 @pytest.fixture
 def mock_writer(mock_connection):
-    """Mock an asycio connection writer."""
+    """Mock an asyncio connection writer."""
     writer = Mock()
     writer.write = mock_connection.write
     writer.drain = CoroutineMock()
@@ -42,7 +42,7 @@ def mock_writer(mock_connection):
 
 @pytest.fixture
 def mock_reader(mock_connection):
-    """Mock an asycio connection reader."""
+    """Mock an asyncio connection reader."""
     reader = Mock()
     reader.read = mock_connection.read
     reader.read_line = CoroutineMock()
