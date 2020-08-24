@@ -117,7 +117,7 @@ class CAM(BaseCAM):
 
     def __init__(self, *args, **kwargs):
         """Set up instance."""
-        super(CAM, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.connect()
 
     def connect(self):
