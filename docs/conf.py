@@ -1,3 +1,4 @@
+"""Provide configuration for the docs."""
 # -*- coding: utf-8 -*-
 #
 # complexity documentation build configuration file, created by
@@ -23,7 +24,8 @@ cwd = os.getcwd()
 parent = os.path.dirname(cwd)
 sys.path.insert(0, parent)
 
-import leicacam
+# pylint: disable=import-error
+import leicacam  # noqa: E402
 
 # -- General configuration -----------------------------------------------------
 
@@ -53,7 +55,7 @@ master_doc = "index"
 # General information about the project.
 project = "leicacam"
 now = datetime.datetime.now()
-copyright = "{}, Arve Seljebu".format(now.year)
+copyright = "{}, Arve Seljebu".format(now.year)  # pylint: disable=redefined-builtin
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -194,11 +196,11 @@ htmlhelp_basename = "leicacamdoc"
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    # 'papersize': 'letterpaper',
     # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # 'pointsize': '10pt',
     # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+    # 'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
