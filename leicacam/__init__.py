@@ -1,9 +1,9 @@
 """Control Leica microscopes with python."""
+from pathlib import Path
+
 __author__ = "Arve Seljebu"
 __email__ = "arve.seljebu@gmail.com"
-from os.path import join, dirname
-
-__version__ = open(join(dirname(__file__), "VERSION")).read().strip()
+__version__ = (Path(__file__).parent / "VERSION").read_text(encoding="utf-8").strip()
 
 __all__ = ["CAM"]
 
