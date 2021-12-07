@@ -41,7 +41,6 @@ if platform.system() == "Windows":
         except KeyError:
             pass
 
-
 else:
     debug = logger(pydebug.debug("leicacam"))  # pylint: disable=invalid-name
 
