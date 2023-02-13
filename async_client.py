@@ -4,9 +4,9 @@ import asyncio
 from leicacam.async_cam import AsyncCAM
 
 
-async def run(loop):
+async def run():
     """Run client."""
-    cam = AsyncCAM(loop=loop)
+    cam = AsyncCAM()
     await cam.connect()
     print(cam.welcome_msg)
     await cam.send(b"/cmd:deletelist")
@@ -21,6 +21,4 @@ async def run(loop):
 
 
 if __name__ == "__main__":
-    LOOP = asyncio.new_event_loop()
-    LOOP.run_until_complete(run(LOOP))
-    LOOP.close()
+    asyncio.run(run())

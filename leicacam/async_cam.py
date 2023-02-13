@@ -10,19 +10,16 @@ from leicacam.cam import BaseCAM, _parse_receive, check_messages
 class AsyncCAM(BaseCAM):
     """Driver for LASAF Computer Assisted Microscopy using asyncio."""
 
-    def __init__(self, *args, loop=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set up instance."""
         super().__init__(*args, **kwargs)
-        self.loop = loop or asyncio.get_event_loop()
         self.reader = None
         self.writer = None
         self.welcome_msg = None
 
     async def connect(self):
         """Connect to LASAF through a CAM-socket."""
-        self.reader, self.writer = await asyncio.open_connection(
-            self.host, self.port, loop=self.loop
-        )
+        self.reader, self.writer = await asyncio.open_connection(self.host, self.port)
         self.welcome_msg = await self.reader.read(self.buffer_size)
 
     async def send(self, commands):

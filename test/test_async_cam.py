@@ -6,10 +6,6 @@ import pytest
 from leicacam.async_cam import AsyncCAM
 from leicacam.cam import bytes_as_dict, tuples_as_dict
 
-# pylint: disable=redefined-outer-name
-# All test coroutines will be treated as marked.
-pytestmark = pytest.mark.asyncio  # pylint: disable=invalid-name
-
 
 class MockEchoConnection:
     """Mock an echo connection."""
@@ -25,14 +21,14 @@ class MockEchoConnection:
         return self.msg[0:buffer_size]
 
 
-@pytest.fixture
-def mock_connection():
+@pytest.fixture(name="mock_connection")
+def mock_connection_fixture():
     """Return an echo connection."""
     return MockEchoConnection()
 
 
-@pytest.fixture
-def mock_writer(mock_connection):
+@pytest.fixture(name="mock_writer")
+def mock_writer_fixture(mock_connection):
     """Mock an asyncio connection writer."""
     writer = Mock()
     writer.write = mock_connection.write
@@ -41,8 +37,8 @@ def mock_writer(mock_connection):
     yield writer
 
 
-@pytest.fixture
-def mock_reader(mock_connection):
+@pytest.fixture(name="mock_reader")
+def mock_reader_fixture(mock_connection):
     """Mock an asyncio connection reader."""
     reader = Mock()
     reader.read = mock_connection.read
@@ -52,14 +48,14 @@ def mock_reader(mock_connection):
     yield reader
 
 
-@pytest.fixture
-def open_connection_ret(mock_reader, mock_writer):
+@pytest.fixture(name="open_connection_ret")
+def open_connection_ret_fixture(mock_reader, mock_writer):
     """Define the side_effect for open_connection."""
     return mock_reader, mock_writer
 
 
-@pytest.fixture
-def mock_open_connection(open_connection_ret):
+@pytest.fixture(name="mock_open_connection")
+def mock_open_connection_fixture(open_connection_ret):
     """Mock asyncio open_connection."""
     open_connection_patch = patch(
         "leicacam.async_cam.asyncio.open_connection", return_value=open_connection_ret
@@ -68,12 +64,12 @@ def mock_open_connection(open_connection_ret):
         yield mock_open
 
 
-@pytest.fixture
-def async_cam(event_loop, mock_open_connection):
+@pytest.fixture(name="async_cam")
+async def async_cam_fixture(mock_open_connection):
     """Yield an AsyncCAM instance with a mock socket."""
     # pylint: disable=unused-argument
-    _async_cam = AsyncCAM(loop=event_loop)
-    event_loop.run_until_complete(_async_cam.connect())
+    _async_cam = AsyncCAM()
+    await _async_cam.connect()
     yield _async_cam
 
 
