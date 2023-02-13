@@ -1,6 +1,7 @@
 """Tests for async cam module."""
+from unittest.mock import AsyncMock, Mock, patch
+
 import pytest
-from asynctest.mock import CoroutineMock, Mock, patch
 
 from leicacam.async_cam import AsyncCAM
 from leicacam.cam import bytes_as_dict, tuples_as_dict
@@ -35,8 +36,8 @@ def mock_writer(mock_connection):
     """Mock an asyncio connection writer."""
     writer = Mock()
     writer.write = mock_connection.write
-    writer.drain = CoroutineMock()
-    writer.wait_closed = CoroutineMock()
+    writer.drain = AsyncMock()
+    writer.wait_closed = AsyncMock()
     yield writer
 
 
@@ -45,9 +46,9 @@ def mock_reader(mock_connection):
     """Mock an asyncio connection reader."""
     reader = Mock()
     reader.read = mock_connection.read
-    reader.read_line = CoroutineMock()
-    reader.readexactly = CoroutineMock()
-    reader.readuntil = CoroutineMock()
+    reader.read_line = AsyncMock()
+    reader.readexactly = AsyncMock()
+    reader.readuntil = AsyncMock()
     yield reader
 
 
