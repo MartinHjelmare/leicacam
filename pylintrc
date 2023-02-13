@@ -1,8 +1,5 @@
-[MASTER]
-reports=no
-
-# Black needs to disable wrong-hanging-indent.
+[MAIN]
+score=no
 
 disable=
-  bad-continuation,
   locally-disabled,
