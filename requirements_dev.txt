@@ -3,6 +3,6 @@
 -r requirements_pypi.txt
 -r requirements_test.txt
 -r docs/requirements.txt
-tox==4.4.7
+tox==4.4.8
 
 -e .
