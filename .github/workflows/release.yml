@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout@v3.5.1
       - name: Set up Python
         uses: actions/setup-python@v4.5.0
         with:
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Generate changelog for default branch
     steps:
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout@v3.5.1
         with:
           ref: master
 
