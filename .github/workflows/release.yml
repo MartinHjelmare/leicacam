@@ -22,7 +22,7 @@ jobs:
           make clean
           make build
       - name: Save build output
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v4.3.2
         with:
           name: built-output
           path: ./dist
