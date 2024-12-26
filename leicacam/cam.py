@@ -1,4 +1,5 @@
 """Provide an interface to the CAM server."""
+
 import os
 import functools
 import logging

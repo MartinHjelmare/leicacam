@@ -1,4 +1,5 @@
 """Tests for cam module."""
+
 import socket
 from collections import OrderedDict
 from unittest.mock import MagicMock, patch

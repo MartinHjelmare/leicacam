@@ -1,4 +1,5 @@
 """Control Leica microscopes with python."""
+
 from pathlib import Path
 
 __author__ = "Arve Seljebu"

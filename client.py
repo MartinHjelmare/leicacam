@@ -1,4 +1,5 @@
 """Test client."""
+
 from time import sleep
 
 from leicacam.cam import CAM

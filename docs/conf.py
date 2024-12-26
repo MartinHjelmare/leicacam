@@ -1,4 +1,5 @@
 """Provide configuration for the docs."""
+
 # -*- coding: utf-8 -*-
 #
 # complexity documentation build configuration file, created by
