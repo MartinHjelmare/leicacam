@@ -1,4 +1,5 @@
 """Test client using asyncio."""
+
 import asyncio
 
 from leicacam.async_cam import AsyncCAM
