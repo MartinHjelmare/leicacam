@@ -23,7 +23,7 @@ setup(
     url="https://github.com/MartinHjelmare/leicacam",
     packages=find_packages(exclude=["test", "test.*"]),
     include_package_data=True,
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=["async_timeout", "pydebug"],
     license="MIT",
     zip_safe=False,
@@ -34,7 +34,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
     ],
 )
