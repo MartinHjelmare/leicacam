@@ -11,7 +11,7 @@ Control Leica microscopes with python
 
 ## Installation
 
-- **The latest version of leicacam requires Python 3.8+**
+- **The latest version of leicacam requires Python 3.9+**
 - If you need to keep using Python 2.7, pin your version of leicacam to 0.3.0.
 
 Install using `pip`:
