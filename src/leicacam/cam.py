@@ -140,7 +140,7 @@ class CAM(BaseCAM):
             while True:
                 msg = self.socket.recv(self.buffer_size)
                 debug(b"< " + msg)
-        except socket.error:
+        except OSError:
             pass
 
     def send(self, commands: list[tuple[str, str]] | bytes) -> int:
@@ -176,7 +176,7 @@ class CAM(BaseCAM):
         """Receive message from socket interface as list of OrderedDict."""
         try:
             incoming = self.socket.recv(self.buffer_size)
-        except socket.error:
+        except OSError:
             return []
 
         return _parse_receive(incoming)
