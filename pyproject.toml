@@ -21,7 +21,7 @@ license = {text = "MIT"}
 name = "leicacam"
 readme = "README.md"
 requires-python = ">=3.11"
-version = "0.5.0"
+version = "0.6.0"
 
 dependencies = [
   "async_timeout",

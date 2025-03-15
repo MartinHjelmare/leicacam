@@ -15,7 +15,7 @@ from sphinx.ext import apidoc
 project = "leicacam"
 project_copyright = "2025, Martin Hjelmare"
 author = "Martin Hjelmare"
-release = "0.5.0"
+release = "0.6.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
