@@ -1,24 +1,50 @@
 # leicacam
 
-[![build-badge]][build]
-[![pypi-version]][pypi]
-[![wheel]][pypi]
-[![Documentation Status][docs-build-badge]][docs]
+<p align="center">
+  <a href="https://github.com/MartinHjelmare/leicacam/actions/workflows/ci.yml?query=branch%3Amain">
+    <img src="https://img.shields.io/github/actions/workflow/status/MartinHjelmare/leicacam/ci.yml?branch=main&label=CI&logo=github&style=flat-square" alt="CI Status" >
+  </a>
+  <a href="https://leicacam.readthedocs.io">
+    <img src="https://img.shields.io/readthedocs/leicacam.svg?logo=read-the-docs&logoColor=fff&style=flat-square" alt="Documentation Status">
+  </a>
+  <a href="https://codecov.io/gh/MartinHjelmare/leicacam">
+    <img src="https://img.shields.io/codecov/c/github/MartinHjelmare/leicacam.svg?logo=codecov&logoColor=fff&style=flat-square" alt="Test coverage percentage">
+  </a>
+</p>
+<p align="center">
+  <a href="https://github.com/astral-sh/uv">
+    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json" alt="uv">
+  </a>
+  <a href="https://github.com/astral-sh/ruff">
+    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff">
+  </a>
+  <a href="https://github.com/pre-commit/pre-commit">
+    <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=flat-square" alt="pre-commit">
+  </a>
+</p>
+<p align="center">
+  <a href="https://pypi.org/project/leicacam/">
+    <img src="https://img.shields.io/pypi/v/leicacam.svg?logo=python&logoColor=fff&style=flat-square" alt="PyPI Version">
+  </a>
+  <img src="https://img.shields.io/pypi/pyversions/leicacam.svg?style=flat-square&logo=python&amp;logoColor=fff" alt="Supported Python versions">
+  <img src="https://img.shields.io/pypi/l/leicacam.svg?style=flat-square" alt="License">
+</p>
 
-## Overview
+---
+
+**Documentation**: <a href="https://leicacam.readthedocs.io" target="_blank">https://leicacam.readthedocs.io </a>
+
+**Source Code**: <a href="https://github.com/MartinHjelmare/leicacam" target="_blank">https://github.com/MartinHjelmare/leicacam </a>
+
+---
 
 Control Leica microscopes with python
 
 ## Installation
 
-- **The latest version of leicacam requires Python 3.11+**
-- If you need to keep using Python 2.7, pin your version of leicacam to 0.3.0.
+Install this via pip (or your favourite package manager):
 
-Install using `pip`:
-
-```bash
-pip3 install leicacam
-```
+`pip install leicacam`
 
 ## Example
 
@@ -46,45 +72,11 @@ response = cam.send(command)
 print(response)
 ```
 
-## Documentation
+## Credits
 
-See available commands in the API reference: [http://leicacam.rtfd.org](http://leicacam.rtfd.org).
+[![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
 
-## Development
-
-Install dependencies and link development version of leicacam to pip:
-
-```bash
-pip install -r requirements_dev.txt
-```
-
-### Code formatting
-
-We use black code formatter to automatically format the code.
-
-```bash
-black ./
-```
-
-### Testing
-
-```bash
-tox
-```
-
-### Build documentation locally
-
-To build the documentation:
-
-```bash
-pip install -r docs/requirements.txt
-make docs
-```
-
-[build-badge]: https://github.com/MartinHjelmare/leicacam/workflows/Test/badge.svg
-[build]: https://github.com/MartinHjelmare/leicacam/actions
-[pypi-version]: https://img.shields.io/pypi/v/leicacam.svg
-[pypi]: https://pypi.org/project/leicacam/
-[wheel]: https://img.shields.io/pypi/wheel/leicacam.svg
-[docs-build-badge]: https://readthedocs.org/projects/leicacam/badge/?version=latest
-[docs]: https://leicacam.readthedocs.io/en/latest/?badge=latest
+This package was created with
+[Copier](https://copier.readthedocs.io/) and the
+[browniebroke/pypackage-template](https://github.com/browniebroke/pypackage-template)
+project template.

@@ -1,0 +1,20 @@
+# Changes here will be overwritten by Copier
+_commit: c2d7118
+_src_path: https://github.com/browniebroke/pypackage-template
+copyright_year: '2025'
+documentation: true
+email: marhje52@gmail.com
+full_name: Martin Hjelmare
+github_username: MartinHjelmare
+has_cli: false
+initial_commit: false
+is_django_package: false
+open_source_license: MIT
+package_name: leicacam
+project_name: leicacam
+project_short_description: Control Leica microscopes with python
+project_slug: leicacam
+run_uv_sync: false
+setup_github: false
+setup_pre_commit: true
+

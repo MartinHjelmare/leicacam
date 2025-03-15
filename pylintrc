@@ -1,8 +1,0 @@
-[MAIN]
-score=no
-
-disable=
-  locally-disabled,
-
-[DESIGN]
-max-positional-arguments=7

@@ -5,7 +5,7 @@ import asyncio
 from leicacam.async_cam import AsyncCAM
 
 
-async def run():
+async def run() -> None:
     """Run client."""
     cam = AsyncCAM()
     await cam.connect()
