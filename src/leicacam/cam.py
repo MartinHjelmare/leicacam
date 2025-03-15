@@ -1,27 +1,32 @@
 """Provide an interface to the CAM server."""
 
+from __future__ import annotations
+
 from collections import OrderedDict
+from collections.abc import Callable
 import functools
 import logging
 import os
 import platform
 import socket
 from time import sleep, time
-from typing import Any
+from typing import Any, Concatenate, ParamSpec, TypeVar, cast
 
-import pydebug
+import pydebug  # type: ignore[import-untyped]
 
 _LOGGER = logging.getLogger(__name__)
+_P = ParamSpec("_P")
+_R = TypeVar("_R")
 
 
-def logger(function):
+def logger(function: Callable[Concatenate[_P], _R]) -> Callable[_P, _R]:
     """Decorate passed in function and log message to module logger."""
 
     @functools.wraps(function)
-    def wrapper(*args: Any, **kwargs: Any):
+    def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
         """Wrap function."""
-        sep = kwargs.get("sep", " ")
-        end = kwargs.get("end", "")  # do not add newline by default
+        sep = cast(str, kwargs.get("sep", " "))
+        end = cast(str, kwargs.get("end", ""))  # do not add newline by default
         out = sep.join([repr(x) for x in args])
         out = out + end
         _LOGGER.debug(out)
@@ -86,7 +91,7 @@ class BaseCAM:
         return msg
 
 
-def _parse_receive(incoming: bytes) -> list[OrderedDict]:
+def _parse_receive(incoming: bytes) -> list[OrderedDict[str, str]]:
     """Parse received response.
 
     Parameters
