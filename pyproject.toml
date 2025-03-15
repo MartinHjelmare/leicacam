@@ -1,0 +1,169 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools"]
+
+[project]
+authors = [
+  {name = "Martin Hjelmare", email = "marhje52@gmail.com"},
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries",
+]
+description = "Control Leica microscopes with python"
+license = {text = "MIT"}
+name = "leicacam"
+readme = "README.md"
+requires-python = ">=3.11"
+version = "0.5.0"
+
+dependencies = [
+  "async_timeout",
+  "pydebug",
+]
+urls."Bug Tracker" = "https://github.com/MartinHjelmare/leicacam/issues"
+urls.Changelog = "https://github.com/MartinHjelmare/leicacam/blob/main/CHANGELOG.md"
+urls.documentation = "https://leicacam.readthedocs.io"
+urls.repository = "https://github.com/MartinHjelmare/leicacam"
+
+[dependency-groups]
+dev = [
+  "codespell==2.4.1",
+  "copier==9.6.0",
+  "mypy==1.15.0",
+  "pre-commit==4.1.0",
+  "pytest==8.3.5",
+  "pytest-asyncio==0.25.3",
+  "pytest-cov==6.0.0",
+  "python-semantic-release>=9,<10",
+  "ruff==0.11.0",
+]
+docs = [
+  "furo>=2023.5.20; python_version>='3.11'",
+  "myst-parser>=0.16; python_version>='3.11'",
+  "sphinx>=4; python_version>='3.11'",
+  "sphinx-autobuild>=2024,<2025; python_version>='3.11'",
+]
+
+[tool.ruff]
+line-length = 88
+lint.ignore = [
+  "D203", # 1 blank line required before class docstring
+  "D213", # Multi-line docstring summary should start at the second line
+  "D417", # False positives in some occasions
+  "EM101", # raw-string-in-exception
+  "EM102", # f-string-in-exception
+  "PLR2004", # magic-value-comparison
+  "TC001", # typing-only-first-party-import
+  "TC002", # typing-only-third-party-import
+  "TC003", # typing-only-stdlib-import  #"TID252", # relative-imports
+  "TRY003", # raise-vanilla-args
+]
+lint.isort.force-sort-within-sections = true
+lint.isort.known-first-party = ["leicacam", "tests"]
+lint.per-file-ignores."docs/conf.py" = ["D100"]
+lint.per-file-ignores."setup.py" = ["D100"]
+lint.per-file-ignores."tests/**/*" = [
+  "S101",
+]
+lint.select = [
+  "B", # flake8-bugbear
+  "D", # flake8-docstrings
+  "C4", # flake8-comprehensions
+  "S", # flake8-bandit
+  "F", # pyflake
+  "E", # pycodestyle
+  "W", # pycodestyle
+  "UP", # pyupgrade
+  "I", # isort
+  "RUF", # ruff specific
+]
+
+[tool.pytest.ini_options]
+addopts = """\
+    -Wdefault
+    --cov=leicacam
+    --cov-report=term-missing
+    --cov-report=xml
+    """
+asyncio_default_fixture_loop_scope = "function"
+asyncio_mode = "auto"
+pythonpath = ["src"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "@overload",
+  "if TYPE_CHECKING",
+  "raise NotImplementedError",
+  'if __name__ == "__main__":',
+]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+exclude = [
+  'docs/.*',
+  'setup.py',
+]
+mypy_path = "src/"
+no_implicit_optional = true
+show_error_codes = true
+warn_unreachable = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+allow_untyped_defs = true
+module = "tests.*"
+
+[[tool.mypy.overrides]]
+ignore_errors = true
+module = "docs.*"
+
+[tool.semantic_release]
+build_command = """
+pip install uv
+uv lock
+git add uv.lock
+uv build
+"""
+major_on_zero = false
+tag_format = "{version}"
+version_toml = ["pyproject.toml:project.version"]
+version_variables = [
+  "src/leicacam/__init__.py:__version__",
+  "docs/conf.py:release",
+]
+
+[tool.semantic_release.changelog]
+exclude_commit_patterns = [
+  '''chore(?:\([^)]*?\))?: .+''',
+  '''ci(?:\([^)]*?\))?: .+''',
+  '''refactor(?:\([^)]*?\))?: .+''',
+  '''style(?:\([^)]*?\))?: .+''',
+  '''test(?:\([^)]*?\))?: .+''',
+  '''build\((?!deps\): .+)''',
+  '''Merged? .*''',
+  '''Initial [Cc]ommit.*''', # codespell:ignore
+]
+
+[tool.semantic_release.changelog.environment]
+keep_trailing_newline = true
+
+[tool.semantic_release.branches.main]
+match = "main"
+
+[tool.semantic_release.branches.noop]
+match = "(?!main$)"
+prerelease = true
