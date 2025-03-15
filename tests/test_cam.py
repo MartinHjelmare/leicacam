@@ -1,7 +1,6 @@
 """Tests for cam module."""
 
 from collections import OrderedDict
-import socket
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -9,26 +8,22 @@ import pytest
 from leicacam.cam import CAM, bytes_as_dict, tuples_as_bytes, tuples_as_dict
 
 
-def flush():
-    """Flush the socket."""
-    pass
-
-
 @pytest.fixture
 def mock_socket():
     """Return a mock echo socket."""
     echo_socket = EchoSocket()
-    echo_socket.close = MagicMock()
     return echo_socket
 
 
 @pytest.fixture
 def cam(mock_socket):
     """Yield a CAM instance with a mock socket."""
-    with patch("socket.socket") as mock_socket_class:
+    with (
+        patch("socket.socket") as mock_socket_class,
+        patch("leicacam.cam.CAM.flush"),
+    ):
         mock_socket_class.return_value = mock_socket
         mock_cam = CAM()
-        mock_cam.flush = flush
 
         yield mock_cam
 
@@ -37,6 +32,10 @@ class EchoSocket:
     """Dummy echo socket for mocking."""
 
     msg = ""
+
+    def __init__(self) -> None:
+        """Set up instance."""
+        self.close = MagicMock()
 
     def send(self, msg):
         """Send a message."""
@@ -53,10 +52,6 @@ class EchoSocket:
 
     def settimeout(self, timeout):
         """Set a timeout."""
-        pass
-
-    def close(self):
-        """Close the socket."""
         pass
 
 
@@ -99,13 +94,12 @@ def test_flush():
     """Test flush method."""
     cmd = b"/cmd:startscan\n"
     mock_recv = MagicMock()
-    mock_recv.side_effect = [cmd, socket.error()]
+    mock_recv.side_effect = [cmd, OSError()]
     with patch("socket.socket") as mock_socket_class:
         mock_socket = MagicMock()
+        mock_socket.recv = mock_recv
         mock_socket_class.return_value = mock_socket
         cam = CAM()
-        cam.socket.recv = mock_recv
-
         cam.flush()
 
     assert len(mock_recv.mock_calls) == 2
@@ -116,7 +110,7 @@ def test_flush():
 def test_receive_error(cam):
     """Test receive method when a socket error happens."""
     cam.socket.recv = MagicMock()
-    cam.socket.recv.side_effect = socket.error()
+    cam.socket.recv.side_effect = OSError()
     response = cam.receive()
 
     assert isinstance(response, list)
@@ -126,7 +120,7 @@ def test_receive_error(cam):
 def test_commands(cam):
     """Short hand commands should work as intended."""
     # get_information
-    cmd = cam.prefix + [("cmd", "getinfo"), ("dev", "stage")]
+    cmd = [*cam.prefix, ("cmd", "getinfo"), ("dev", "stage")]
 
     information = cam.get_information()
     should_be = tuples_as_dict(cmd)
@@ -134,7 +128,7 @@ def test_commands(cam):
     assert information == should_be
 
     # start_scan
-    cmd = cam.prefix + [("cmd", "startscan")]
+    cmd = [*cam.prefix, ("cmd", "startscan")]
 
     response = cam.start_scan()
     should_be = tuples_as_dict(cmd)
@@ -142,7 +136,7 @@ def test_commands(cam):
     assert response == should_be
 
     # stop_scan
-    cmd = cam.prefix + [("cmd", "stopscan")]
+    cmd = [*cam.prefix, ("cmd", "stopscan")]
 
     response = cam.stop_scan()
     should_be = tuples_as_dict(cmd)
@@ -150,7 +144,7 @@ def test_commands(cam):
     assert response == should_be
 
     # autofocus_scan
-    cmd = cam.prefix + [("cmd", "autofocusscan")]
+    cmd = [*cam.prefix, ("cmd", "autofocusscan")]
 
     response = cam.autofocus_scan()
     should_be = tuples_as_dict(cmd)
@@ -158,7 +152,7 @@ def test_commands(cam):
     assert response == should_be
 
     # pause_scan
-    cmd = cam.prefix + [("cmd", "pausescan")]
+    cmd = [*cam.prefix, ("cmd", "pausescan")]
 
     response = cam.pause_scan()
     should_be = tuples_as_dict(cmd)

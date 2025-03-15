@@ -12,7 +12,7 @@ import socket
 from time import sleep, time
 from typing import Any, Concatenate, ParamSpec, TypeVar, cast
 
-import pydebug  # type: ignore[import-untyped]
+import pydebug
 
 _LOGGER = logging.getLogger(__name__)
 _P = ParamSpec("_P")
@@ -182,7 +182,7 @@ class CAM(BaseCAM):
         return _parse_receive(incoming)
 
     def wait_for(
-        self, cmd: str, value: str | None = None, timeout: int = 60
+        self, cmd: str, value: str | None = None, timeout: float = 60
     ) -> OrderedDict[str, str]:
         """Hang until command is received.
 

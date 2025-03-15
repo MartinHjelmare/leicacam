@@ -85,5 +85,5 @@ def run_apidoc(_: Any) -> None:
 
 
 def setup(app: Sphinx) -> None:
-    """Setup sphinx."""
+    """Set up sphinx."""
     app.connect("builder-inited", run_apidoc)

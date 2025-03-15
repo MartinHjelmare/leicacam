@@ -5,7 +5,7 @@ from time import sleep
 from leicacam.cam import CAM
 
 
-def run():
+def run() -> None:
     """Run client."""
     cam = CAM()
     print(cam.welcome_msg)

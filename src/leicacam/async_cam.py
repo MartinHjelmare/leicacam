@@ -33,7 +33,7 @@ class AsyncCAM(BaseCAM):
         ----------
         commands : list of tuples or bytes string
             Commands as a list of tuples or a bytes string. cam.prefix is
-            allways prepended before sending.
+            always prepended before sending.
 
         Returns
         -------
@@ -69,7 +69,7 @@ class AsyncCAM(BaseCAM):
         return _parse_receive(incoming)
 
     async def wait_for(
-        self, cmd: str, value: str | None = None, timeout: int = 60
+        self, cmd: str, value: str | None = None, timeout: float = 60
     ) -> OrderedDict[str, str]:
         """Hang until command is received.
 
@@ -89,7 +89,7 @@ class AsyncCAM(BaseCAM):
         Returns
         -------
         collections.OrderedDict
-            Last received messsage or empty message if timeout is reached.
+            Last received message or empty message if timeout is reached.
 
         """
         try:
