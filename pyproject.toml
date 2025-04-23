@@ -35,7 +35,7 @@ urls.repository = "https://github.com/MartinHjelmare/leicacam"
 [dependency-groups]
 dev = [
   "codespell==2.4.1",
-  "copier==9.7.0",
+  "copier==9.7.1",
   "mypy==1.15.0",
   "pre-commit==4.2.0",
   "pytest==8.3.5",
