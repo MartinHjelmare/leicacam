@@ -41,7 +41,7 @@ dev = [
   "pytest==8.3.5",
   "pytest-asyncio==1.0.0",
   "pytest-cov==6.1.1",
-  "python-semantic-release>=9,<10",
+  "python-semantic-release>=10,<11",
   "ruff==0.11.12",
 ]
 docs = [
