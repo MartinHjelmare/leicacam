@@ -38,7 +38,7 @@ dev = [
   "copier==9.7.1",
   "mypy==1.16.0",
   "pre-commit==4.2.0",
-  "pytest==8.3.5",
+  "pytest==8.4.0",
   "pytest-asyncio==1.0.0",
   "pytest-cov==6.1.1",
   "python-semantic-release>=9,<10",
