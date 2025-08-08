@@ -4,6 +4,7 @@
     ":semanticCommitTypeAll(chore)"
   ],
   "automergeType": "branch",
+  "lockFileMaintenance": { "enabled": true },
   "packageRules": [
     {
       "matchDepTypes": ["dependencies"],
