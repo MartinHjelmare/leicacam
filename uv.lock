@@ -192,7 +192,7 @@ wheels = [
 
 [[package]]
 name = "copier"
-version = "9.10.0"
+version = "9.10.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama" },
@@ -204,14 +204,15 @@ dependencies = [
     { name = "pathspec" },
     { name = "platformdirs" },
     { name = "plumbum" },
+    { name = "prompt-toolkit" },
     { name = "pydantic" },
     { name = "pygments" },
     { name = "pyyaml" },
     { name = "questionary" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/02/36/e86d86ab7fa47ab7295d7e526a9dba6854dcf2243e1dd857f1597a6361d4/copier-9.10.0.tar.gz", hash = "sha256:7ac1ff85995268b76e2d714cf988b1d75bd64717d86b6a665e43e7756f6540fc", size = 586592, upload-time = "2025-08-26T15:24:17.999Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/36/a5/0cf693f3fa51cba1d36765939e0d9956c0487426ad581868a2507c208bad/copier-9.10.1.tar.gz", hash = "sha256:ba2d729465508da04a62bc9b76eed13d952aa7634a74a69519252fcf8a54d94e", size = 586680, upload-time = "2025-08-28T13:04:54.307Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/eb/64/144fa62bd2a2deda4012d97b27f8a14ee8e6e30eba022e0b07a720914fb8/copier-9.10.0-py3-none-any.whl", hash = "sha256:dbefbe01795980bc6300afa63f7e0c4d44191c022d3b9cfd3ac63d9e61f9b390", size = 56000, upload-time = "2025-08-26T15:24:16.329Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/4b/4a12d04124b0158b77958fb12349828bb4023f6530aaa1713ceb784c77a3/copier-9.10.1-py3-none-any.whl", hash = "sha256:8b1b406367c67e5ee389778246cea18cddd55e71bfc6503d5fa13fe73304407a", size = 56017, upload-time = "2025-08-28T13:04:52.444Z" },
 ]
 
 [[package]]
@@ -519,7 +520,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "codespell", specifier = "==2.4.1" },
-    { name = "copier", specifier = "==9.10.0" },
+    { name = "copier", specifier = "==9.10.1" },
     { name = "mypy", specifier = "==1.17.1" },
     { name = "pre-commit", specifier = "==4.3.0" },
     { name = "pytest", specifier = "==8.4.1" },
