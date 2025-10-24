@@ -42,7 +42,7 @@ dev = [
   "pytest-asyncio==1.2.0",
   "pytest-cov==7.0.0",
   "python-semantic-release>=10,<11",
-  "ruff==0.14.1",
+  "ruff==0.14.2",
 ]
 docs = [
   "furo>=2023.5.20; python_version>='3.11'",
