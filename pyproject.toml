@@ -17,7 +17,7 @@ classifiers = [
   "Topic :: Software Development :: Libraries",
 ]
 description = "Control Leica microscopes with python"
-license = {text = "MIT"}
+license = "MIT"
 name = "leicacam"
 readme = "README.md"
 requires-python = ">=3.11"
