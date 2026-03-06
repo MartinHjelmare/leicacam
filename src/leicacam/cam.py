@@ -10,20 +10,18 @@ import os
 import platform
 import socket
 from time import sleep, time
-from typing import Any, Concatenate, ParamSpec, TypeVar, cast
+from typing import Any, cast
 
 import pydebug
 
 _LOGGER = logging.getLogger(__name__)
-_P = ParamSpec("_P")
-_R = TypeVar("_R")
 
 
-def logger(function: Callable[Concatenate[_P], _R]) -> Callable[_P, _R]:
+def logger[**P, R](function: Callable[P, R]) -> Callable[P, R]:
     """Decorate passed in function and log message to module logger."""
 
     @functools.wraps(function)
-    def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         """Wrap function."""
         sep = cast(str, kwargs.get("sep", " "))
         end = cast(str, kwargs.get("end", ""))  # do not add newline by default
