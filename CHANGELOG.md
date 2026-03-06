@@ -2,6 +2,18 @@
 
 <!-- version list -->
 
+## v0.7.0 (2026-03-06)
+
+### Chores
+
+- Require Python 3.12 ([#757](https://github.com/MartinHjelmare/leicacam/pull/757),
+  [`3eb7e50`](https://github.com/MartinHjelmare/leicacam/commit/3eb7e50367a5460f0dddb275ddb225897f5be542))
+
+### Breaking Changes
+
+- Drop support for Python 3.11
+
+
 ## v0.6.0 (2025-03-15)
 
 ### Features
