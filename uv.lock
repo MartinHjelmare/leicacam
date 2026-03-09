@@ -195,7 +195,7 @@ wheels = [
 
 [[package]]
 name = "copier"
-version = "9.13.0"
+version = "9.13.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama" },
@@ -212,9 +212,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "questionary" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9a/5a/3ee4562d77cf1214193bfd080bdf64c86395182e852822395a9bb5be1340/copier-9.13.0.tar.gz", hash = "sha256:5dd6efba8ea3d2d6c05d36574d50087c6b824e55e36146d7369c15f171442134", size = 615342, upload-time = "2026-03-05T20:46:50.858Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ea/fb/20f865f01fc972890b5db372f7d29bc5caebb978eda0d75df0fd12aaf3bf/copier-9.13.1.tar.gz", hash = "sha256:698ff6e053de7e7a4685423cadce3cbd7638dc9d5877aae44d714a8478ce00e4", size = 615489, upload-time = "2026-03-09T12:15:50.537Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/77/c8d53d2a6d3734a597bb23390db616d8a649e67bf3c325f89cea7a84676f/copier-9.13.0-py3-none-any.whl", hash = "sha256:3abb37f15aea815f9dc5e48da6166a7eb8cc09d97bd8d06d8e5ee0e4f395bf2a", size = 59359, upload-time = "2026-03-05T20:46:49.264Z" },
+    { url = "https://files.pythonhosted.org/packages/a6/11/21bd3150e4f024b9c548a898e3935a55188a078b3f4efd54d553943e1f8d/copier-9.13.1-py3-none-any.whl", hash = "sha256:c3c88965b9f1420523bfc0a56c2f9b23d3b33c460e8484eb63c91cd20f5a240b", size = 59367, upload-time = "2026-03-09T12:15:48.744Z" },
 ]
 
 [[package]]
@@ -526,7 +526,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "codespell", specifier = "==2.4.2" },
-    { name = "copier", specifier = "==9.13.0" },
+    { name = "copier", specifier = "==9.13.1" },
     { name = "mypy", specifier = "==1.19.1" },
     { name = "pre-commit", specifier = "==4.5.1" },
     { name = "pytest", specifier = "==9.0.2" },
