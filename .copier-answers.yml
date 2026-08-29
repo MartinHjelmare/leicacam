@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: c2d7118
+_commit: 083bdee
 _src_path: https://github.com/browniebroke/pypackage-template
 copyright_year: '2025'
 documentation: true
@@ -10,6 +10,7 @@ has_cli: false
 initial_commit: false
 is_django_package: false
 open_source_license: MIT
+open_with_editor: false
 package_name: leicacam
 project_name: leicacam
 project_short_description: Control Leica microscopes with python

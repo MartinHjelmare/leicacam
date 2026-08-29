@@ -1,30 +1,31 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools"]
+requires = [ "setuptools>=77.0.3" ]
 
 [project]
+name = "leicacam"
+version = "0.7.0"
+description = "Control Leica microscopes with python"
+readme = "README.md"
+license = "MIT"
 authors = [
-  {name = "Martin Hjelmare", email = "marhje52@gmail.com"},
+  { name = "Martin Hjelmare", email = "marhje52@gmail.com" },
 ]
+requires-python = ">=3.12"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Natural Language :: English",
   "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Software Development :: Libraries",
 ]
-description = "Control Leica microscopes with python"
-license = "MIT"
-name = "leicacam"
-readme = "README.md"
-requires-python = ">=3.12"
-version = "0.7.0"
-
 dependencies = [
-  "async_timeout",
+  "async-timeout",
   "pydebug",
 ]
 urls."Bug Tracker" = "https://github.com/MartinHjelmare/leicacam/issues"
@@ -36,138 +37,117 @@ urls.repository = "https://github.com/MartinHjelmare/leicacam"
 dev = [
   "codespell==2.4.3",
   "copier==9.17.2",
-  "mypy==2.3.1",
-  "pre-commit==4.6.2",
+  "prek==0.5.0",
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
   "pytest-cov==7.1.0",
-  "python-semantic-release>=10,<11",
-  "ruff==0.16.4",
+  "python-semantic-release==10.6.2",
+  "ruff==0.16.5",
+  "sybil==9.3.0",
+  "ty==0.0.75",
 ]
 docs = [
-  "furo>=2023.5.20; python_version>='3.11'",
-  "myst-parser>=0.16; python_version>='3.11'",
-  "sphinx>=4; python_version>='3.11'",
-  "sphinx-autobuild>=2025,<2026; python_version>='3.11'",
+  "furo; python_version>='3.12'",
+  "myst-parser; python_version>='3.12'",
+  "sphinx==9.*; python_version>='3.12'",
+  "sphinx-autobuild; python_version>='3.12'",
 ]
 
 [tool.ruff]
 line-length = 88
-lint.ignore = [
-  "D203", # 1 blank line required before class docstring
-  "D213", # Multi-line docstring summary should start at the second line
-  "D417", # False positives in some occasions
-  "EM101", # raw-string-in-exception
-  "EM102", # f-string-in-exception
-  "PLR2004", # magic-value-comparison
-  "TC001", # typing-only-first-party-import
-  "TC002", # typing-only-third-party-import
-  "TC003", # typing-only-stdlib-import  #"TID252", # relative-imports
-  "TRY003", # raise-vanilla-args
+lint.select = [
+  "B",   # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "D",   # flake8-docstrings
+  "E",   # pycodestyle
+  "F",   # pyflake
+  "I",   # isort
+  "RUF", # ruff specific
+  "S",   # flake8-bandit
+  "UP",  # pyupgrade
+  "W",   # pycodestyle
 ]
-lint.isort.force-sort-within-sections = true
-lint.isort.known-first-party = ["leicacam", "tests"]
-lint.per-file-ignores."docs/conf.py" = ["D100"]
-lint.per-file-ignores."setup.py" = ["D100"]
+lint.ignore = [
+  "D203",    # 1 blank line required before class docstring
+  "D213",    # Multi-line docstring summary should start at the second line
+  "D417",    # Missing argument descriptions in the docstring
+  "EM101",   # raw-string-in-exception
+  "EM102",   # f-string-in-exception
+  "PLR2004", # magic-value-comparison
+  "TC001",   # typing-only-first-party-import
+  "TC002",   # typing-only-third-party-import
+  "TC003",   # typing-only-stdlib-import
+  "TRY003",  # raise-vanilla-args
+]
+lint.per-file-ignores."docs/conf.py" = [ "D100" ]
 lint.per-file-ignores."tests/**/*" = [
   "S101",
 ]
-lint.select = [
-  "B", # flake8-bugbear
-  "D", # flake8-docstrings
-  "C4", # flake8-comprehensions
-  "S", # flake8-bandit
-  "F", # pyflake
-  "E", # pycodestyle
-  "W", # pycodestyle
-  "UP", # pyupgrade
-  "I", # isort
-  "RUF", # ruff specific
-]
+lint.isort.force-sort-within-sections = true
+lint.isort.known-first-party = [ "leicacam", "tests" ]
 
-[tool.pytest.ini_options]
-addopts = """\
-    -Wdefault
-    --cov=leicacam
-    --cov-report=term-missing
-    --cov-report=xml
-    """
+[tool.pyproject-fmt]
+keep_full_version = true
+max_supported_python = "3.15"
+
+[tool.ty]
+src.exclude = [ "docs/" ]
+terminal.error-on-warning = true
+
+[tool.pytest]
+addopts = [
+  "-Wonce",
+  "-p no:doctest",
+  "--cov=leicacam",
+  "--cov-report=term",
+  "--cov-report=xml",
+]
 asyncio_default_fixture_loop_scope = "function"
 asyncio_mode = "auto"
-pythonpath = ["src"]
+minversion = "9.0"
+pythonpath = [ "src" ]
 
-[tool.coverage.run]
-branch = true
-
-[tool.coverage.report]
-exclude_lines = [
-  "pragma: no cover",
+[tool.coverage]
+run.branch = true
+paths.source = [
+  "src",
+  ".tox/**/site-packages",
+]
+report.exclude_lines = [
   "@overload",
-  "if TYPE_CHECKING",
-  "raise NotImplementedError",
   'if __name__ == "__main__":',
+  "if TYPE_CHECKING",
+  "pragma: no cover",
+  "raise NotImplementedError",
 ]
-
-[tool.mypy]
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
-exclude = [
-  'docs/.*',
-  'setup.py',
-]
-mypy_path = "src/"
-no_implicit_optional = true
-show_error_codes = true
-warn_unreachable = true
-warn_unused_ignores = true
-
-[[tool.mypy.overrides]]
-allow_untyped_defs = true
-module = "tests.*"
-
-[[tool.mypy.overrides]]
-ignore_errors = true
-module = "docs.*"
 
 [tool.semantic_release]
+tag_format = "{version}"
+major_on_zero = false
 allow_zero_version = true
+version_variables = [
+  "docs/conf.py:release",
+  "src/leicacam/__init__.py:__version__",
+]
+version_toml = [ "pyproject.toml:project.version" ]
 build_command = """
 pip install uv
 uv lock
 git add uv.lock
 uv build
 """
-major_on_zero = false
-tag_format = "{version}"
-version_toml = ["pyproject.toml:project.version"]
-version_variables = [
-  "src/leicacam/__init__.py:__version__",
-  "docs/conf.py:release",
+commit_parser_options.parse_squash_commits = false
+branches.main.match = "main"
+branches.noop.match = "(?!main$)"
+branches.noop.prerelease = true
+changelog.environment.keep_trailing_newline = true
+changelog.exclude_commit_patterns = [
+  "chore(?:\\([^)]*?\\))?: .+",
+  "ci(?:\\([^)]*?\\))?: .+",
+  "refactor(?:\\([^)]*?\\))?: .+",
+  "style(?:\\([^)]*?\\))?: .+",
+  "test(?:\\([^)]*?\\))?: .+",
+  "build\\((?!deps\\): .+)",
+  "Merged? .*",
+  "Initial [Cc]ommit.*",         # codespell:ignore
 ]
-
-[tool.semantic_release.changelog]
-exclude_commit_patterns = [
-  '''chore(?:\([^)]*?\))?: .+''',
-  '''ci(?:\([^)]*?\))?: .+''',
-  '''refactor(?:\([^)]*?\))?: .+''',
-  '''style(?:\([^)]*?\))?: .+''',
-  '''test(?:\([^)]*?\))?: .+''',
-  '''build\((?!deps\): .+)''',
-  '''Merged? .*''',
-  '''Initial [Cc]ommit.*''', # codespell:ignore
-]
-
-[tool.semantic_release.commit_parser_options]
-parse_squash_commits = false
-
-[tool.semantic_release.changelog.environment]
-keep_trailing_newline = true
-
-[tool.semantic_release.branches.main]
-match = "main"
-
-[tool.semantic_release.branches.noop]
-match = "(?!main$)"
-prerelease = true

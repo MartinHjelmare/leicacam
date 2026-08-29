@@ -160,10 +160,10 @@ class CAM(BaseCAM):
         ::
 
             >>> # send list of tuples
-            >>> cam.send([('cmd', 'enableall'), ('value', 'true')])
+            >>> cam.send([('cmd', 'enableall'), ('value', 'true')])  # doctest: +SKIP
 
             >>> # send bytes string
-            >>> cam.send(b'/cmd:enableall /value:true')
+            >>> cam.send(b'/cmd:enableall /value:true')  # doctest: +SKIP
 
         """
         self.flush()  # discard any waiting messages
@@ -329,13 +329,13 @@ class CAM(BaseCAM):
         ::
 
             >>> # load {ScanningTemplate}leicacam.xml
-            >>> cam.load_template('leicacam')
+            >>> cam.load_template('leicacam')  # doctest: +SKIP
 
             >>> # load {ScanningTemplate}leicacam.xml
-            >>> cam.load_template('{ScanningTemplate}leicacam')
+            >>> cam.load_template('{ScanningTemplate}leicacam')  # doctest: +SKIP
 
             >>> # load {ScanningTemplate}leicacam.xml
-            >>> cam.load_template('/path/to/{ScanningTemplate}leicacam.xml')
+            >>> cam.load_template('/{ScanningTemplate}leicacam.xml')  # doctest: +SKIP
 
         """
         basename = os.path.basename(filename)
@@ -405,7 +405,7 @@ def tuples_as_dict(_list: list[tuple[str, str]]) -> OrderedDict[str, str]:
     ::
 
         >>> tuples_as_dict([('cmd', 'val'), ('cmd2', 'val2')])
-        OrderedDict([('cmd', 'val'), ('cmd2', 'val2')])
+        OrderedDict({'cmd': 'val', 'cmd2': 'val2'})
 
     """
     _dict = OrderedDict()

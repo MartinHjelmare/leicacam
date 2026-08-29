@@ -45,10 +45,12 @@ class AsyncCAM(BaseCAM):
         ::
 
             >>> # send list of tuples
-            >>> await cam.send([('cmd', 'enableall'), ('value', 'true')])
+            >>> await cam.send(  # doctest: +SKIP
+            ...     [('cmd', 'enableall'), ('value', 'true')]
+            ... )
 
             >>> # send bytes string
-            >>> await cam.send(b'/cmd:enableall /value:true')
+            >>> await cam.send(b'/cmd:enableall /value:true')  # doctest: +SKIP
 
         """
         if self.writer is None:
