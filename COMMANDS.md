@@ -18,8 +18,7 @@ Currently leicacam have implemented some convenience methods:
 But all commands can be sent like this:
 
 ```python
-command = [('cmd', 'enableall'),
-           ('value', 'true')]
+command = [("cmd", "enableall"), ("value", "true")]
 cam.send(command)
 ```
 
