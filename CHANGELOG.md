@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.7.1 (2026-08-30)
+
+### Bug Fixes
+
+- Remove pydebug dependency ([#779](https://github.com/MartinHjelmare/leicacam/pull/779),
+  [`e02bc3a`](https://github.com/MartinHjelmare/leicacam/commit/e02bc3a6ded0942b8f335448bb2b25482524dceb))
+
+
 ## v0.7.0 (2026-03-06)
 
 ### Chores
