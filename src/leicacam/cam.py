@@ -7,12 +7,10 @@ from collections.abc import Callable
 import functools
 import logging
 import os
-import platform
 import socket
+import sys
 from time import sleep, time
 from typing import Any, cast
-
-import pydebug
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,20 +32,11 @@ def logger[**P, R](function: Callable[P, R]) -> Callable[P, R]:
 
 
 # debug with `DEBUG=leicacam python script.py`
-if platform.system() == "Windows":
-    # monkeypatch
-    @logger
-    def debug(msg: bytes | str) -> None:
-        """Debug on Windows."""
-        try:
-            dbg = os.environ["DEBUG"]
-            if dbg in ("leicacam", "*"):
-                print("leicacam " + str(msg))
-        except KeyError:
-            pass
-
-else:
-    debug = logger(pydebug.debug("leicacam"))
+@logger
+def debug(msg: bytes | str) -> None:
+    """Print debug message to stderr when DEBUG enables leicacam."""
+    if os.environ.get("DEBUG") in ("leicacam", "*"):
+        print("leicacam " + str(msg), file=sys.stderr)
 
 
 class BaseCAM:

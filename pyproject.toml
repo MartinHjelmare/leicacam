@@ -26,7 +26,6 @@ classifiers = [
 ]
 dependencies = [
   "async-timeout",
-  "pydebug",
 ]
 urls."Bug Tracker" = "https://github.com/MartinHjelmare/leicacam/issues"
 urls.Changelog = "https://github.com/MartinHjelmare/leicacam/blob/main/CHANGELOG.md"
