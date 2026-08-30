@@ -6,8 +6,6 @@ import asyncio
 from collections import OrderedDict
 from typing import Any
 
-from async_timeout import timeout as async_timeout
-
 from leicacam.cam import BaseCAM, _parse_receive, check_messages
 
 
@@ -95,7 +93,7 @@ class AsyncCAM(BaseCAM):
 
         """
         try:
-            async with async_timeout(timeout * 60):
+            async with asyncio.timeout(timeout * 60):
                 while True:
                     msgs = await self.receive()
                     msg = check_messages(msgs, cmd, value=value)
