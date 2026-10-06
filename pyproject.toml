@@ -38,7 +38,7 @@ dev = [
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
   "pytest-cov==7.1.0",
-  "python-semantic-release==10.6.2",
+  "python-semantic-release==10.7.0",
   "ruff==0.16.8",
   "sybil==10.1.0",
   "ty==0.0.82",
