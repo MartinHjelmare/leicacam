@@ -34,7 +34,7 @@ urls.repository = "https://github.com/MartinHjelmare/leicacam"
 dev = [
   "codespell==2.4.3",
   "copier==9.19.1",
-  "prek==0.5.7",
+  "prek==0.5.9",
   "pytest==9.2.0",
   "pytest-asyncio==1.4.1",
   "pytest-cov==7.1.0",
